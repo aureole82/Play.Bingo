@@ -54,6 +54,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helper\EnumerableExtensions.cs" />
+    <Compile Include="Models\BingoCardModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\BingoCardViewModel.cs" />
     <Compile Include="ViewModels\BingoColumnViewModel.cs" />

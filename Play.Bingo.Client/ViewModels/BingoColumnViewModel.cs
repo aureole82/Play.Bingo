@@ -1,21 +1,20 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Play.Bingo.Client.ViewModels
+﻿namespace Play.Bingo.Client.ViewModels
 {
     public class BingoColumnViewModel : ViewModelBase
     {
         private char _caption;
 
-        public BingoColumnViewModel()
+        public BingoColumnViewModel() : this('B', new[] {1, 4, 8, 12, 15})
         {
-            Numbers = new ObservableCollection<int>();
-
-            if (!IsInDesignMode) return;
-            Caption = 'B';
-            Numbers = new ObservableCollection<int> {1, 4, 8, 12, 15};
         }
 
-        public ObservableCollection<int> Numbers { get; private set; }
+        public BingoColumnViewModel(char caption, int[] numbers)
+        {
+            Caption = caption;
+            Numbers = numbers;
+        }
+
+        public int[] Numbers { get; private set; }
 
         public char Caption
         {

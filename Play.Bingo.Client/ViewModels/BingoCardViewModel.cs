@@ -1,39 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Play.Bingo.Client.Helper;
+using Play.Bingo.Client.Models;
 
 namespace Play.Bingo.Client.ViewModels
 {
     public class BingoCardViewModel : ViewModelBase
     {
-        public BingoCardViewModel()
+        public BingoCardViewModel() : this(GenerateCard(new Random(DateTime.Now.Millisecond)))
         {
-            var random = new Random(DateTime.Now.Millisecond);
-            Columns = new ObservableCollection<BingoColumnViewModel>
-            {
-                new BingoColumnViewModel {Caption = 'B'},
-                new BingoColumnViewModel {Caption = 'I'},
-                new BingoColumnViewModel {Caption = 'N'},
-                new BingoColumnViewModel {Caption = 'G'},
-                new BingoColumnViewModel {Caption = 'O'}
-            };
-
-            for (var index = 0; index < Columns.Count; index++)
-            {
-                var column = Columns[index];
-                column.Numbers.Clear();
-                foreach (var number in GenerateNumbers(index*15, (index + 1)*15, random))
-                {
-                    column.Numbers.Add(number);
-                }
-            }
         }
 
-        public ObservableCollection<BingoColumnViewModel> Columns { get; private set; }
+        public BingoCardViewModel(BingoCardModel bingoCard)
+        {
+            Columns = new[]
+            {
+                new BingoColumnViewModel('B', bingoCard.B),
+                new BingoColumnViewModel('I', bingoCard.I),
+                new BingoColumnViewModel('N', bingoCard.N),
+                new BingoColumnViewModel('G', bingoCard.G),
+                new BingoColumnViewModel('O', bingoCard.O)
+            };
+        }
 
-        private static IEnumerable<int> GenerateNumbers(int from, int to, Random random)
+        public BingoColumnViewModel[] Columns { get; private set; }
+
+        #region Private helper methods.
+
+        private static BingoCardModel GenerateCard(Random random)
+        {
+            return new BingoCardModel
+            {
+                B = GenerateNumbers(0, 15, random),
+                I = GenerateNumbers(15, 30, random),
+                N = GenerateNumbers(30, 45, random),
+                G = GenerateNumbers(45, 50, random),
+                O = GenerateNumbers(60, 75, random)
+            };
+        }
+
+        private static int[] GenerateNumbers(int from, int to, Random random)
         {
             var all = new List<int>();
             for (var i = from + 1; i < to + 1; i++)
@@ -42,7 +49,10 @@ namespace Play.Bingo.Client.ViewModels
             }
             return all
                 .Shuffle(random)
-                .Take(5);
+                .Take(5)
+                .ToArray();
         }
+
+        #endregion
     }
 }
