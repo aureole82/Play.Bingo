@@ -4,7 +4,7 @@
     {
         private char _caption;
 
-        public BingoColumnViewModel() : this('B', new[] {1, 4, 8, 12, 15})
+        public BingoColumnViewModel() : this('N', new[] {33, 44, 0, 42, 37})
         {
         }
 

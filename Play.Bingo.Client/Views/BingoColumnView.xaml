@@ -23,8 +23,24 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Gray" BorderThickness="1" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}">
-                        <TextBlock Text="{Binding}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" />
+                        <Grid>
+                            <TextBlock Name="NumberTextBlock"  Text="{Binding}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" />
+                            <Viewbox Name="JokerViewbox" Visibility="Collapsed" >
+                                <TextBlock Text="Joker">
+                                    <TextBlock.LayoutTransform>
+                                        <RotateTransform Angle="-45" />
+                                    </TextBlock.LayoutTransform>
+                                </TextBlock>
+                            </Viewbox>
+                            
+                        </Grid>
                     </Border>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding}" Value="0">
+                            <Setter TargetName="JokerViewbox" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="NumberTextBlock" Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
