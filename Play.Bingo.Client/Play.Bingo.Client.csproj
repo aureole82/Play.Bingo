@@ -54,10 +54,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helper\EnumerableExtensions.cs" />
+    <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Models\BingoCardModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\BingoCardViewModel.cs" />
     <Compile Include="ViewModels\BingoColumnViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\BingoCardView.xaml.cs">
       <DependentUpon>BingoCardView.xaml</DependentUpon>

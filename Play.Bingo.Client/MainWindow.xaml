@@ -5,9 +5,16 @@
         xmlns:vm="clr-namespace:Play.Bingo.Client.ViewModels"
         Title="Bingo" Height="350" Width="525">
     <Window.Resources>
-        <vm:BingoCardViewModel x:Key="BingoCard" />
+        <vm:MainViewModel x:Key="ViewModel" />
     </Window.Resources>
-    <Grid>
-        <v:BingoCardView HorizontalAlignment="Center" DataContext="{StaticResource BingoCard}" />
+    <Grid DataContext="{StaticResource ViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <v:BingoCardView Grid.ColumnSpan="2" HorizontalAlignment="Center" DataContext="{Binding BingoCard}" />
+        <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
+            <Button Content="New" Command="{Binding GenerateCommand}" />
+        </StackPanel>
     </Grid>
 </Window>
