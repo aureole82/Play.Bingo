@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:Play.Bingo.Client.ViewModels"
-             mc:Ignorable="d" d:DesignHeight="200"
+             mc:Ignorable="d"
              d:DataContext="{d:DesignInstance vm:BingoColumnViewModel, IsDesignTimeCreatable=True}">
     <Grid>
         <Grid.RowDefinitions>
@@ -23,7 +23,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Gray" BorderThickness="1" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}">
-                        <TextBlock Text="{Binding}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" />
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

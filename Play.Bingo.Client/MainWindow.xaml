@@ -12,7 +12,9 @@
             <ColumnDefinition />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <v:BingoCardView Grid.ColumnSpan="2" HorizontalAlignment="Center" DataContext="{Binding BingoCard}" />
+        <Viewbox Grid.ColumnSpan="2" >
+            <v:BingoCardView DataContext="{Binding BingoCard}" />
+        </Viewbox>
         <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
             <Button Content="New" Command="{Binding GenerateCommand}" />
         </StackPanel>
