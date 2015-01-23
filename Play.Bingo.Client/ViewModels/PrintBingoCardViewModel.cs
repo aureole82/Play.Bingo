@@ -102,8 +102,10 @@ namespace Play.Bingo.Client.ViewModels
 
             if (printDialog.ShowDialog() == true)
             {
-                printDialog.PrintVisual(_printArea, "My First Print Job");
+                printDialog.PrintVisual(_printArea, "Bingo card");
             }
+
+            if (CanNext()) Next();
         }
 
 
