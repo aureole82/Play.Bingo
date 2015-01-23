@@ -4,9 +4,9 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <!-- Common colors in the application. -->
-        <SolidColorBrush x:Key="DisabledBrush" Color="Gray" />
-        <SolidColorBrush x:Key="BackgroundBrush" Color="LightGray" />
-        <SolidColorBrush x:Key="HighlightBrush" Color="Chartreuse" />
+        <SolidColorBrush x:Key="DisabledBrush" Color="#66FFFFFF" />
+        <SolidColorBrush x:Key="BackgroundBrush" Color="#333333" />
+        <SolidColorBrush x:Key="HighlightBrush" Color="MediumSeaGreen" />
 
         <!-- Style to create a simple flat button. -->
         <Style x:Key="FlatButtonStyle" TargetType="ButtonBase">
@@ -18,17 +18,20 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ButtonBase">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        </Border>
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Border>
+                            <Border Name="DisabledBorder" Background="{StaticResource DisabledBrush}" Visibility="Collapsed" />
+                        </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="{StaticResource HighlightBrush}" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Background" Value="{StaticResource DisabledBrush}" />
+                                <Setter TargetName="DisabledBorder" Property="Visibility" Value="Visible" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
