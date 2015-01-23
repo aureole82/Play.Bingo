@@ -16,7 +16,9 @@
             <v:BingoCardView DataContext="{Binding BingoCard}" />
         </Viewbox>
         <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
-            <Button Content="New" Command="{Binding GenerateCommand}" />
+            <Button Command="{Binding GenerateCommand}" Style="{StaticResource FlatButtonStyle}" ToolTip="Generate new card!">
+                <Image Source="Images/Random.png" />
+            </Button>
         </StackPanel>
     </Grid>
 </Window>
