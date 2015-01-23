@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="Play.Bingo.Client.Views.SelectBingoCardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:Play.Bingo.Client.ViewModels"
+             xmlns:v="clr-namespace:Play.Bingo.Client.Views"
+             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="700"
+             d:DataContext="{d:DesignInstance vm:SelectBingoCardViewModel, IsDesignTimeCreatable=True}"
+             Name="Root">
+    <UserControl.Resources>
+    </UserControl.Resources>
+    <ScrollViewer >
+        <ItemsControl ItemsSource="{Binding Cards}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:BingoCardViewModel}">
+                    <Button Style="{StaticResource FlatButtonStyle}" Margin="5" 
+                            Command="{Binding DataContext.SelectCardCommand, ElementName=Root}"
+                            CommandParameter="{Binding Card}">
+                        <v:BingoCardView Margin="2" TextBlock.Foreground="White" MinHeight="180" />
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+
+</UserControl>

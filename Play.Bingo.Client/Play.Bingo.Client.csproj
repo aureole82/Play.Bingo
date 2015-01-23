@@ -66,10 +66,13 @@
       <DependentUpon>BingoCardModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Services\IMessageService.cs" />
     <Compile Include="Services\IStorageService.cs" />
+    <Compile Include="Services\MessageService.cs" />
     <Compile Include="Services\StorageService.cs" />
     <Compile Include="ViewModels\BingoCardViewModel.cs" />
     <Compile Include="ViewModels\BingoColumnViewModel.cs" />
+    <Compile Include="ViewModels\SelectBingoCardViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\BingoCardView.xaml.cs">
@@ -77,6 +80,9 @@
     </Compile>
     <Compile Include="Views\BingoColumnView.xaml.cs">
       <DependentUpon>BingoColumnView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectBingoCardView.xaml.cs">
+      <DependentUpon>SelectBingoCardView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -97,6 +103,10 @@
     <Page Include="Views\BingoColumnView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SelectBingoCardView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +145,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Open.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

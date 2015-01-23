@@ -6,22 +6,33 @@
         Title="Bingo" Height="350" Width="525" Icon="Images\Icon.ico">
     <Window.Resources>
         <vm:MainViewModel x:Key="ViewModel" />
+        <DataTemplate DataType="{x:Type vm:BingoCardViewModel}">
+            <Viewbox>
+                <v:BingoCardView />
+            </Viewbox>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SelectBingoCardViewModel}">
+            <v:SelectBingoCardView />
+        </DataTemplate>
     </Window.Resources>
     <Grid DataContext="{StaticResource ViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Viewbox Grid.ColumnSpan="2" >
-            <v:BingoCardView DataContext="{Binding BingoCard}" />
-        </Viewbox>
+        <ContentControl Grid.ColumnSpan="2" Content="{Binding CurrentViewModel}" />
         <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
-            <Button Width="54" ToolTip="Save card!"
+            <Button Width="58" ToolTip="Open card!"
+                    Style="{StaticResource FlatButtonStyle}"
+                    Command="{Binding OpenCommand}" >
+                <Image Source="Images/Open.png" />
+            </Button>
+            <Button Width="58" ToolTip="Save card!"
                     Style="{StaticResource FlatButtonStyle}"
                     Command="{Binding SaveCommand}" >
                 <Image Source="Images/Save.png" />
             </Button>
-            <Button Width="54" ToolTip="Generate new card!"
+            <Button Width="58" ToolTip="Generate new card!"
                     Style="{StaticResource FlatButtonStyle}"
                     Command="{Binding GenerateCommand}" >
                 <Image Source="Images/Random.png" />

@@ -1,36 +1,45 @@
-﻿using Play.Bingo.Client.Helper;
+﻿using System.Linq;
+using System.Threading;
+using System.Windows;
+using Play.Bingo.Client.Helper;
+using Play.Bingo.Client.Models;
 using Play.Bingo.Client.Services;
 
 namespace Play.Bingo.Client.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly IStorageService _storage = new StorageService();
+        private readonly IMessageService _messenger = App.Messenger;
+        private readonly IStorageService _storage = App.Storage;
 
         public MainViewModel()
         {
             GenerateCommand = new RelayCommand(Generate);
             SaveCommand = new RelayCommand(Save, CanSave);
+            OpenCommand = new RelayCommand(Open);
+
             Generate();
+            _messenger.Subscribe<BingoCardModel>(ShowCard);
         }
 
         #region Bindable properties and commands.
 
-        private BingoCardViewModel _bingoCard;
+        private ViewModelBase _currentViewModel;
 
-        public BingoCardViewModel BingoCard
+        public ViewModelBase CurrentViewModel
         {
-            get { return _bingoCard; }
+            get { return _currentViewModel; }
             set
             {
-                if (_bingoCard == value) return;
-                _bingoCard = value;
+                if (_currentViewModel == value) return;
+                _currentViewModel = value;
                 RaisePropertyChanged();
             }
         }
 
         public RelayCommand GenerateCommand { get; private set; }
         public RelayCommand SaveCommand { get; private set; }
+        public RelayCommand OpenCommand { get; private set; }
 
         #endregion
 
@@ -40,19 +49,46 @@ namespace Play.Bingo.Client.ViewModels
 
         private void Generate()
         {
-            BingoCard = new BingoCardViewModel();
+            CurrentViewModel = new BingoCardViewModel();
             _saved = false;
+        }
+
+        private void ShowCard(BingoCardModel card)
+        {
+            CurrentViewModel = new BingoCardViewModel(card);
+            _saved = true;
         }
 
         private void Save()
         {
-            _storage.Save(BingoCard.Card);
+            var bingoCardViewModel = CurrentViewModel as BingoCardViewModel;
+            if (bingoCardViewModel == null) return;
+
+            _storage.Save(bingoCardViewModel.Card);
             _saved = true;
         }
 
         private bool CanSave()
         {
-            return !_saved;
+            return CurrentViewModel is BingoCardViewModel && !_saved;
+        }
+
+        private void Open()
+        {
+            var bingoCardSelector = new SelectBingoCardViewModel();
+            CurrentViewModel = bingoCardSelector;
+
+            new Thread(() =>
+            {
+                var bingoCardModels = _storage.Load();
+                foreach (var card in bingoCardModels.Select(c => new BingoCardViewModel(c)))
+                {
+                    var local = card;
+                    Application.Current.Dispatcher.Invoke(() => bingoCardSelector.Cards.Add(local));
+                    // Just to get a context switch.
+                    Thread.Sleep(10);
+                }
+            }).Start();
         }
 
         #endregion

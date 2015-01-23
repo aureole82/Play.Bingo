@@ -37,7 +37,7 @@ namespace Play.Bingo.Client.ViewModels
             {
                 if (_card == value) return;
                 _card = value;
-                RaisePropertyChanged("Card");
+                RaisePropertyChanged();
             }
         }
 

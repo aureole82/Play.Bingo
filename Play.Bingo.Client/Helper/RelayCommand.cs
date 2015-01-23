@@ -18,10 +18,12 @@ namespace Play.Bingo.Client.Helper
         {
         }
 
+        #region ICommand Members.
+
         public event EventHandler CanExecuteChanged
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            add { if (_canExecute != null) CommandManager.RequerySuggested += value; }
+            remove { if (_canExecute != null) CommandManager.RequerySuggested -= value; }
         }
 
         public bool CanExecute(object parameter)
@@ -31,7 +33,45 @@ namespace Play.Bingo.Client.Helper
 
         public void Execute(object parameter)
         {
-            _execute.Invoke();
+            _execute();
         }
+
+        #endregion
+    }
+
+    public class RelayCommand<T> : ICommand
+    {
+        private readonly Predicate<T> _canExecute;
+        private readonly Action<T> _execute;
+
+        public RelayCommand(Action<T> execute, Predicate<T> canExecute)
+        {
+            _execute = execute;
+            _canExecute = canExecute;
+        }
+
+        public RelayCommand(Action<T> execute) : this(execute, null)
+        {
+        }
+
+        #region ICommand Members.
+
+        public event EventHandler CanExecuteChanged
+        {
+            add { if (_canExecute != null) CommandManager.RequerySuggested += value; }
+            remove { if (_canExecute != null) CommandManager.RequerySuggested -= value; }
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return _canExecute == null || _canExecute((T) parameter);
+        }
+
+        public void Execute(object parameter)
+        {
+            _execute((T) parameter);
+        }
+
+        #endregion
     }
 }
