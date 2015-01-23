@@ -11,7 +11,7 @@ namespace Play.Bingo.Client.ViewModels
 
         public SelectBingoCardViewModel()
         {
-            SelectCardCommand = new RelayCommand<BingoCardModel>(SelectCard);
+            SelectCardCommand = new RelayCommand<BingoCardViewModel>(SelectCard);
             Cards = new ObservableCollection<BingoCardViewModel>();
 
             if (!IsInDesignMode) return;
@@ -26,13 +26,13 @@ namespace Play.Bingo.Client.ViewModels
 
         public ObservableCollection<BingoCardViewModel> Cards { get; private set; }
 
-        public RelayCommand<BingoCardModel> SelectCardCommand { get; private set; }
+        public RelayCommand<BingoCardViewModel> SelectCardCommand { get; private set; }
 
         #endregion
 
         #region Private helper methods.
 
-        private void SelectCard(BingoCardModel card)
+        private void SelectCard(BingoCardViewModel card)
         {
             _messenger.Publish(card);
         }

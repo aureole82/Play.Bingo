@@ -21,7 +21,7 @@
                 <DataTemplate DataType="{x:Type vm:BingoCardViewModel}">
                     <Button Style="{StaticResource FlatButtonStyle}" Margin="5" 
                             Command="{Binding DataContext.SelectCardCommand, ElementName=Root}"
-                            CommandParameter="{Binding Card}">
+                            CommandParameter="{Binding}">
                         <v:BingoCardView Margin="2" TextBlock.Foreground="White" MinHeight="180" />
                     </Button>
                 </DataTemplate>

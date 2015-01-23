@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:v="clr-namespace:Play.Bingo.Client.Views"
         xmlns:vm="clr-namespace:Play.Bingo.Client.ViewModels"
-        Title="Bingo" Height="350" Width="525" Icon="Images\Icon.ico">
+        Title="Bingo" Height="500" Width="1200" Icon="Images\Icon.ico">
     <Window.Resources>
         <vm:MainViewModel x:Key="ViewModel" />
         <DataTemplate DataType="{x:Type vm:BingoCardViewModel}">
@@ -14,6 +14,9 @@
         <DataTemplate DataType="{x:Type vm:SelectBingoCardViewModel}">
             <v:SelectBingoCardView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PrintBingoCardViewModel}">
+            <v:PrintBingoCardView />
+        </DataTemplate>
     </Window.Resources>
     <Grid DataContext="{StaticResource ViewModel}">
         <Grid.ColumnDefinitions>
@@ -22,6 +25,11 @@
         </Grid.ColumnDefinitions>
         <ContentControl Grid.ColumnSpan="2" Content="{Binding CurrentViewModel}" />
         <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
+            <Button Width="58" ToolTip="Print card!"
+                    Style="{StaticResource FlatButtonStyle}"
+                    Command="{Binding PrintPreviewCommand}" >
+                <Image Source="Images/Preview.png" />
+            </Button>
             <Button Width="58" ToolTip="Open card!"
                     Style="{StaticResource FlatButtonStyle}"
                     Command="{Binding OpenCommand}" >

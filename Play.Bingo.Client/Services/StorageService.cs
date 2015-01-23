@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Play.Bingo.Client.Models;
 
@@ -32,16 +33,15 @@ namespace Play.Bingo.Client.Services
         }
 
         /// <summary> <see cref="IStorageService.Load" />. </summary>
-        public BingoCardModel[] Load()
+        public IDictionary<string, BingoCardModel> Load()
         {
             var folder = GetFolder();
             var existingCards = folder.GetFiles("*.card");
 
             return existingCards
-                .Select(existingCard => existingCard.FullName)
-                .Select(File.ReadAllBytes)
-                .Select(binary => new BingoCardModel(binary))
-                .ToArray();
+                .ToDictionary(
+                    existingCard => existingCard.Name,
+                    existingCard => new BingoCardModel(File.ReadAllBytes(existingCard.FullName)));
         }
 
         private static DirectoryInfo GetFolder()

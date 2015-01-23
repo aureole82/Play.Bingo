@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Windows;
 using Play.Bingo.Client.Helper;
-using Play.Bingo.Client.Models;
 using Play.Bingo.Client.Services;
 
 namespace Play.Bingo.Client.ViewModels
@@ -17,9 +16,10 @@ namespace Play.Bingo.Client.ViewModels
             GenerateCommand = new RelayCommand(Generate);
             SaveCommand = new RelayCommand(Save, CanSave);
             OpenCommand = new RelayCommand(Open);
+            PrintPreviewCommand = new RelayCommand(PrintPreview);
 
             Generate();
-            _messenger.Subscribe<BingoCardModel>(ShowCard);
+            _messenger.Subscribe<BingoCardViewModel>(ShowCard);
         }
 
         #region Bindable properties and commands.
@@ -40,6 +40,7 @@ namespace Play.Bingo.Client.ViewModels
         public RelayCommand GenerateCommand { get; private set; }
         public RelayCommand SaveCommand { get; private set; }
         public RelayCommand OpenCommand { get; private set; }
+        public RelayCommand PrintPreviewCommand { get; private set; }
 
         #endregion
 
@@ -53,9 +54,9 @@ namespace Play.Bingo.Client.ViewModels
             _saved = false;
         }
 
-        private void ShowCard(BingoCardModel card)
+        private void ShowCard(BingoCardViewModel card)
         {
-            CurrentViewModel = new BingoCardViewModel(card);
+            CurrentViewModel = card;
             _saved = true;
         }
 
@@ -80,8 +81,8 @@ namespace Play.Bingo.Client.ViewModels
 
             new Thread(() =>
             {
-                var bingoCardModels = _storage.Load();
-                foreach (var card in bingoCardModels.Select(c => new BingoCardViewModel(c)))
+                var bingoCards = _storage.Load();
+                foreach (var card in bingoCards.Select(c => new BingoCardViewModel(c.Value, c.Key)))
                 {
                     var local = card;
                     Application.Current.Dispatcher.Invoke(() => bingoCardSelector.Cards.Add(local));
@@ -89,6 +90,11 @@ namespace Play.Bingo.Client.ViewModels
                     Thread.Sleep(10);
                 }
             }).Start();
+        }
+
+        private void PrintPreview()
+        {
+            CurrentViewModel = new PrintBingoCardViewModel();
         }
 
         #endregion

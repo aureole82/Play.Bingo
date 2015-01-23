@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="Play.Bingo.Client.Views.PrintBingoCardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:Play.Bingo.Client.ViewModels"
+             xmlns:v="clr-namespace:Play.Bingo.Client.Views"
+             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="700"
+             d:DataContext="{d:DesignInstance vm:PrintBingoCardViewModel, IsDesignTimeCreatable=True}"
+             Name="Root">
+    <UserControl.Resources>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <ItemsControl Name="PrintArea" ItemsSource="{Binding Cards}" vm:PrintBingoCardViewModel.PrintArea="{Binding ElementName=PrintArea}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:BingoCardViewModel}">
+                    <Viewbox>
+                        <Grid Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <v:BingoCardView Grid.ColumnSpan="2" MinHeight="180" />
+                            <TextBlock Grid.Column="0" Grid.Row="1" FontSize="8" TextAlignment="Left"
+                                       Text="{Binding Filename}" FontFamily="Consolas"  />
+                            <TextBlock Grid.Column="1" Grid.Row="1" FontSize="8" TextAlignment="Right"
+                                       Text="{Binding Id}" FontFamily="Consolas" />
+
+                        </Grid>
+                    </Viewbox>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <StackPanel Grid.Column="1" VerticalAlignment="Top">
+            <Button Width="58" ToolTip="Print page!"
+                    Style="{StaticResource FlatButtonStyle}"
+                    Command="{Binding PrintCommand}" >
+                <Image Source="../Images/Print.png" />
+            </Button>
+            <Button Width="58" ToolTip="Previous page!"
+                    Style="{StaticResource FlatButtonStyle}"
+                    Command="{Binding PreviousCommand}" >
+                <Image Source="../Images/Up.png" />
+            </Button>
+            <Border>
+                <TextBlock HorizontalAlignment="Center" FontWeight="Bold">
+                    <Run Text="{Binding Page, Mode=OneWay}" />
+                    <Run Text="/" />
+                    <Run Text="{Binding TotalPages, Mode=OneWay}" />
+                </TextBlock>
+            </Border>
+            <Button Width="58" ToolTip="Next page!"
+                    Style="{StaticResource FlatButtonStyle}"
+                    Command="{Binding NextCommand}" >
+                <Image Source="../Images/Down.png" />
+            </Button>
+        </StackPanel>
+    </Grid>
+
+</UserControl>
