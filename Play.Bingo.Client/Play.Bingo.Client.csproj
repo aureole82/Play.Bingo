@@ -66,6 +66,8 @@
       <DependentUpon>BingoCardModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Services\IStorageService.cs" />
+    <Compile Include="Services\StorageService.cs" />
     <Compile Include="ViewModels\BingoCardViewModel.cs" />
     <Compile Include="ViewModels\BingoColumnViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -130,6 +132,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Random.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Save.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

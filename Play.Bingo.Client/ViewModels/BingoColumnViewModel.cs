@@ -2,8 +2,6 @@
 {
     public class BingoColumnViewModel : ViewModelBase
     {
-        private char _caption;
-
         public BingoColumnViewModel() : this('N', new[] {33, 44, 0, 42, 37})
         {
         }
@@ -13,6 +11,10 @@
             Caption = caption;
             Numbers = numbers;
         }
+
+        #region Bindable properties and commands.
+
+        private char _caption;
 
         public int[] Numbers { get; private set; }
 
@@ -26,5 +28,7 @@
                 RaisePropertyChanged();
             }
         }
+
+        #endregion
     }
 }

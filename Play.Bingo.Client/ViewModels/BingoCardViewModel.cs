@@ -14,17 +14,34 @@ namespace Play.Bingo.Client.ViewModels
 
         public BingoCardViewModel(BingoCardModel bingoCard)
         {
+            Card = bingoCard;
             Columns = new[]
             {
-                new BingoColumnViewModel('B', bingoCard.B),
-                new BingoColumnViewModel('I', bingoCard.I),
-                new BingoColumnViewModel('N', bingoCard.N),
-                new BingoColumnViewModel('G', bingoCard.G),
-                new BingoColumnViewModel('O', bingoCard.O)
+                new BingoColumnViewModel('B', Card.B),
+                new BingoColumnViewModel('I', Card.I),
+                new BingoColumnViewModel('N', Card.N),
+                new BingoColumnViewModel('G', Card.G),
+                new BingoColumnViewModel('O', Card.O)
             };
         }
 
+        #region Bindable properties and commands.
+
+        private BingoCardModel _card;
         public BingoColumnViewModel[] Columns { get; private set; }
+
+        public BingoCardModel Card
+        {
+            get { return _card; }
+            set
+            {
+                if (_card == value) return;
+                _card = value;
+                RaisePropertyChanged("Card");
+            }
+        }
+
+        #endregion
 
         #region Private helper methods.
 
