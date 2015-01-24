@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using Play.Bingo.Client.Helper;
-using Play.Bingo.Client.Models;
 using Play.Bingo.Client.Services;
 
 namespace Play.Bingo.Client.ViewModels

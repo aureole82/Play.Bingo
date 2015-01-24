@@ -16,6 +16,7 @@ namespace Play.Bingo.Client.ViewModels
             GenerateCommand = new RelayCommand(Generate);
             SaveCommand = new RelayCommand(Save, CanSave);
             OpenCommand = new RelayCommand(Open);
+            SolveCommand = new RelayCommand(Solve);
             PrintPreviewCommand = new RelayCommand(PrintPreview);
 
             Generate();
@@ -40,6 +41,7 @@ namespace Play.Bingo.Client.ViewModels
         public RelayCommand GenerateCommand { get; private set; }
         public RelayCommand SaveCommand { get; private set; }
         public RelayCommand OpenCommand { get; private set; }
+        public RelayCommand SolveCommand { get; private set; }
         public RelayCommand PrintPreviewCommand { get; private set; }
 
         #endregion
@@ -60,6 +62,11 @@ namespace Play.Bingo.Client.ViewModels
             _saved = true;
         }
 
+        private bool CanSave()
+        {
+            return CurrentViewModel is BingoCardViewModel && !_saved;
+        }
+
         private void Save()
         {
             var bingoCardViewModel = CurrentViewModel as BingoCardViewModel;
@@ -69,9 +76,9 @@ namespace Play.Bingo.Client.ViewModels
             _saved = true;
         }
 
-        private bool CanSave()
+        private void Solve()
         {
-            return CurrentViewModel is BingoCardViewModel && !_saved;
+            CurrentViewModel = new CaptureQrCodeViewModel();
         }
 
         private void Open()

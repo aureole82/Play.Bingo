@@ -14,6 +14,9 @@
         <DataTemplate DataType="{x:Type vm:SelectBingoCardViewModel}">
             <v:SelectBingoCardView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CaptureQrCodeViewModel}">
+            <v:CaptureQrCodeView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type vm:PrintBingoCardViewModel}">
             <v:PrintBingoCardView />
         </DataTemplate>
@@ -29,6 +32,11 @@
                     Style="{StaticResource FlatButtonStyle}"
                     Command="{Binding PrintPreviewCommand}" >
                 <Image Source="Images/Preview.png" />
+            </Button>
+            <Button Width="58" ToolTip="Solve card!"
+                    Style="{StaticResource FlatButtonStyle}"
+                    Command="{Binding SolveCommand}" >
+                <Image Source="Images/QrCode.png" />
             </Button>
             <Button Width="58" ToolTip="Open card!"
                     Style="{StaticResource FlatButtonStyle}"

@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="Play.Bingo.Client.Views.WebcamView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit"
+             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
+    <!-- Warning! Make sure your webcam is addressed by "Integrated Camera" as well. Otherwise correct the Property VideoCaptureSource. -->
+    <controls:VideoCaptureElement x:Name="VideoCaptureElement"
+                                  LoadedBehavior="Play"
+                                  DesiredPixelWidth="320"
+                                  DesiredPixelHeight="240"
+                                  Stretch="UniformToFill"
+                                  EnableSampleGrabbing="True"
+                                  NewVideoSample="CaptureSnapshot"
+                                  VideoCaptureSource="Integrated Camera"
+                                  FPS="10" />
+
+</UserControl>

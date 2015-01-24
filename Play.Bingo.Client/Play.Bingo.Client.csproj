@@ -55,6 +55,15 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFMediaKit">
+      <HintPath>..\libs\WPFMediaKit.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing">
+      <HintPath>..\packages\ZXing.Net.0.14.0.1\lib\net40\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation">
+      <HintPath>..\packages\ZXing.Net.0.14.0.1\lib\net40\zxing.presentation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -82,11 +91,15 @@
     <Compile Include="ViewModels\SelectBingoCardViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\CaptureQrCodeViewModel.cs" />
     <Compile Include="Views\BingoCardView.xaml.cs">
       <DependentUpon>BingoCardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BingoColumnView.xaml.cs">
       <DependentUpon>BingoColumnView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CaptureQrCodeView.xaml.cs">
+      <DependentUpon>CaptureQrCodeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\QrCodeView.xaml.cs">
       <DependentUpon>QrCodeView.xaml</DependentUpon>
@@ -96,6 +109,9 @@
     </Compile>
     <Compile Include="Views\SelectBingoCardView.xaml.cs">
       <DependentUpon>SelectBingoCardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WebcamView.xaml.cs">
+      <DependentUpon>WebcamView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -117,6 +133,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CaptureQrCodeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\QrCodeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -128,6 +148,10 @@
     <Page Include="Views\SelectBingoCardView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WebcamView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +205,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\QrCode.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
