@@ -7,31 +7,34 @@
              mc:Ignorable="d" d:DesignHeight="300"
              d:DataContext="{d:DesignInstance vm:BingoGameViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
-        <DataTemplate x:Key="NumberDataTemplate">
-            <Grid Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" Margin="1">
-                <Ellipse Fill="LightGreen" />
-                <Viewbox>
-                    <TextBlock Text="{Binding}" TextAlignment="Center" FontWeight="Bold" Margin="3" />
-                </Viewbox>
-            </Grid>
-        </DataTemplate>
         <Style x:Key="ItemsControlStyle" TargetType="ItemsControl">
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="Width" Value="35" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Height" Value="60" />
             <Setter Property="Margin" Value="2,0" />
-            <Setter Property="ItemTemplate" Value="{StaticResource NumberDataTemplate}" />
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Grid Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Margin="1">
+                            <Ellipse Fill="LightGreen" />
+                            <Viewbox>
+                                <TextBlock Text="{Binding}" TextAlignment="Center" FontWeight="Bold" Margin="3" />
+                            </Viewbox>
+                        </Grid>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ItemsControl">
                         <Border >
                             <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <TextBlock Background="{StaticResource BackgroundBrush}" FontWeight="Bold" Foreground="White" TextAlignment="Center" FontSize="22"
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Background="{StaticResource BackgroundBrush}" FontWeight="Bold" Foreground="White" TextAlignment="Center" FontSize="30" Width="60"
                                            Text="{TemplateBinding Tag}" Padding="5" />
-                                <StackPanel Grid.Row="1" IsItemsHost="True" Orientation="Vertical" />
+                                <StackPanel Grid.Column="1" IsItemsHost="True" Orientation="Horizontal" />
                             </Grid>
                         </Border>
                     </ControlTemplate>
@@ -40,7 +43,7 @@
         </Style>
     </UserControl.Resources>
     <Grid MinHeight="300">
-        <StackPanel Orientation="Horizontal">
+        <StackPanel>
             <ItemsControl Tag="B" ItemsSource="{Binding B}" Style="{StaticResource ItemsControlStyle}" />
             <ItemsControl Tag="I" ItemsSource="{Binding I}" Style="{StaticResource ItemsControlStyle}" />
             <ItemsControl Tag="N" ItemsSource="{Binding N}" Style="{StaticResource ItemsControlStyle}" />

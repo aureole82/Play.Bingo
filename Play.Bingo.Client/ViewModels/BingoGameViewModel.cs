@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Windows.Input;
+using Play.Bingo.Client.Helper;
 using Play.Bingo.Client.Models;
 using Play.Bingo.Client.Services;
 
@@ -169,10 +170,11 @@ namespace Play.Bingo.Client.ViewModels
             return null;
         }
 
-        private void AddNumber(ICollection<int> container, int number)
+        private void AddNumber(Collection<int> container, int number)
         {
             if (container.Contains(number)) return;
             container.Add(number);
+            container.BubbleSort();
             _inputs.Push(number);
             Save();
         }

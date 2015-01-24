@@ -36,7 +36,7 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:BingoGameViewModel}">
             <Viewbox>
-                <v:BingoGameView />
+                <v:BingoGameView HorizontalAlignment="Left" MinWidth="200" />
             </Viewbox>
         </DataTemplate>
     </Window.Resources>
