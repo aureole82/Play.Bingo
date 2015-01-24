@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
-using System.Windows;
 using System.Windows.Input;
 using Play.Bingo.Client.Helper;
 using Play.Bingo.Client.Models;
@@ -113,6 +111,12 @@ namespace Play.Bingo.Client.ViewModels
 
         private void Play()
         {
+            var runningBingoGame = CurrentViewModel as BingoGameViewModel;
+            if (runningBingoGame != null)
+            {
+                runningBingoGame.Game.IsFinished = true;
+                runningBingoGame.Save();
+            }
             var bingoGameModel =
                 _storage.LoadGames().Where(g => !g.IsFinished).OrderByDescending(g => g.OpenedAt).LastOrDefault();
             CurrentViewModel = new BingoGameViewModel(bingoGameModel ?? new BingoGameModel());

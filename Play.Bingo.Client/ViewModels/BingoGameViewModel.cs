@@ -179,7 +179,7 @@ namespace Play.Bingo.Client.ViewModels
             Save();
         }
 
-        private void Save()
+        public void Save()
         {
             Game.Numbers = B.Union(I).Union(N).Union(G).Union(O).ToList();
             _storage.SaveGame(Game);
