@@ -3,9 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:v="clr-namespace:Play.Bingo.Client.Views"
         xmlns:vm="clr-namespace:Play.Bingo.Client.ViewModels"
-        Title="Bingo" Height="800" Width="1010" Icon="Images\Icon.ico">
+        Title="Bingo" Height="800" Width="1010" Icon="Images\Icon.ico"
+        DataContext="{StaticResource MainViewModel}">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D0}" Key="D0" />
+        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D1}" Key="D1" />
+        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D2}" Key="D2" />
+        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D3}" Key="D3" />
+        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D4}" Key="D4" />
+        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D5}" Key="D5" />
+        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D6}" Key="D6" />
+        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D7}" Key="D7" />
+        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D8}" Key="D8" />
+        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D9}" Key="D9" />
+        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.Tab}" Key="Tab" />
+        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.Back}" Key="Back" />
+    </Window.InputBindings>
     <Window.Resources>
-        <vm:MainViewModel x:Key="ViewModel" />
         <DataTemplate DataType="{x:Type vm:BingoCardViewModel}">
             <Viewbox>
                 <v:BingoCardView />
@@ -20,14 +34,24 @@
         <DataTemplate DataType="{x:Type vm:PrintBingoCardViewModel}">
             <v:PrintBingoCardView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:BingoGameViewModel}">
+            <Viewbox>
+                <v:BingoGameView />
+            </Viewbox>
+        </DataTemplate>
     </Window.Resources>
-    <Grid DataContext="{StaticResource ViewModel}">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <ContentControl Grid.ColumnSpan="2" Content="{Binding CurrentViewModel}" />
         <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
+            <Button Width="58" ToolTip="Play game!"
+                    Style="{StaticResource FlatButtonStyle}"
+                    Command="{Binding PlayCommand}">
+                <Image Source="Images/Play.png" />
+            </Button>
             <Button Width="58" ToolTip="Print card!"
                     Style="{StaticResource FlatButtonStyle}"
                     Command="{Binding PrintPreviewCommand}" >

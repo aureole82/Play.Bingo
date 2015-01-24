@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Input;
 using Play.Bingo.Client.Helper;
+using Play.Bingo.Client.Models;
 using Play.Bingo.Client.Services;
 
 namespace Play.Bingo.Client.ViewModels
@@ -18,6 +21,8 @@ namespace Play.Bingo.Client.ViewModels
             OpenCommand = new RelayCommand(Open);
             SolveCommand = new RelayCommand(Solve);
             PrintPreviewCommand = new RelayCommand(PrintPreview);
+            PlayCommand = new RelayCommand(Play);
+            EnterKeyCommand = new RelayCommand<Key>(EnterKey);
 
             Generate();
             _messenger.Subscribe<BingoCardViewModel>(ShowCard);
@@ -43,6 +48,8 @@ namespace Play.Bingo.Client.ViewModels
         public RelayCommand OpenCommand { get; private set; }
         public RelayCommand SolveCommand { get; private set; }
         public RelayCommand PrintPreviewCommand { get; private set; }
+        public RelayCommand PlayCommand { get; private set; }
+        public RelayCommand<Key> EnterKeyCommand { get; private set; }
 
         #endregion
 
@@ -72,7 +79,7 @@ namespace Play.Bingo.Client.ViewModels
             var bingoCardViewModel = CurrentViewModel as BingoCardViewModel;
             if (bingoCardViewModel == null) return;
 
-            _storage.Save(bingoCardViewModel.Card);
+            _storage.SaveCard(bingoCardViewModel.Card);
             _saved = true;
         }
 
@@ -88,11 +95,11 @@ namespace Play.Bingo.Client.ViewModels
 
             new Thread(() =>
             {
-                var bingoCards = _storage.Load();
+                var bingoCards = _storage.LoadCards();
                 foreach (var card in bingoCards.Select(c => new BingoCardViewModel(c.Value, c.Key)))
                 {
                     var local = card;
-                    Application.Current.Dispatcher.Invoke(() => bingoCardSelector.Cards.Add(local));
+                    UiInvoke(() => bingoCardSelector.Cards.Add(local));
                     // Just to get a context switch.
                     Thread.Sleep(10);
                 }
@@ -102,6 +109,18 @@ namespace Play.Bingo.Client.ViewModels
         private void PrintPreview()
         {
             CurrentViewModel = new PrintBingoCardViewModel();
+        }
+
+        private void Play()
+        {
+            var bingoGameModel =
+                _storage.LoadGames().Where(g => !g.IsFinished).OrderByDescending(g => g.OpenedAt).LastOrDefault();
+            CurrentViewModel = new BingoGameViewModel(bingoGameModel ?? new BingoGameModel());
+        }
+
+        private void EnterKey(Key key)
+        {
+            _messenger.Publish(key);
         }
 
         #endregion

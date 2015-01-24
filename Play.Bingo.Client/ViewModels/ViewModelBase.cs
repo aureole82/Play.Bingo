@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using Play.Bingo.Client.Properties;
@@ -19,6 +20,11 @@ namespace Play.Bingo.Client.ViewModels
         {
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected void UiInvoke(Action action)
+        {
+            Application.Current.Dispatcher.Invoke(action);
         }
     }
 }

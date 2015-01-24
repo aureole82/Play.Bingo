@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="Play.Bingo.Client.Views.BingoGameView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:Play.Bingo.Client.ViewModels"
+             mc:Ignorable="d" d:DesignHeight="300"
+             d:DataContext="{d:DesignInstance vm:BingoGameViewModel, IsDesignTimeCreatable=True}">
+    <UserControl.Resources>
+        <DataTemplate x:Key="NumberDataTemplate">
+            <Grid Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" Margin="1">
+                <Ellipse Fill="LightGreen" />
+                <Viewbox>
+                    <TextBlock Text="{Binding}" TextAlignment="Center" FontWeight="Bold" Margin="3" />
+                </Viewbox>
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="ItemsControlStyle" TargetType="ItemsControl">
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Width" Value="35" />
+            <Setter Property="Margin" Value="2,0" />
+            <Setter Property="ItemTemplate" Value="{StaticResource NumberDataTemplate}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ItemsControl">
+                        <Border >
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock Background="{StaticResource BackgroundBrush}" FontWeight="Bold" Foreground="White" TextAlignment="Center" FontSize="22"
+                                           Text="{TemplateBinding Tag}" Padding="5" />
+                                <StackPanel Grid.Row="1" IsItemsHost="True" Orientation="Vertical" />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid MinHeight="300">
+        <StackPanel Orientation="Horizontal">
+            <ItemsControl Tag="B" ItemsSource="{Binding B}" Style="{StaticResource ItemsControlStyle}" />
+            <ItemsControl Tag="I" ItemsSource="{Binding I}" Style="{StaticResource ItemsControlStyle}" />
+            <ItemsControl Tag="N" ItemsSource="{Binding N}" Style="{StaticResource ItemsControlStyle}" />
+            <ItemsControl Tag="G" ItemsSource="{Binding G}" Style="{StaticResource ItemsControlStyle}" />
+            <ItemsControl Tag="O" ItemsSource="{Binding O}" Style="{StaticResource ItemsControlStyle}" />
+        </StackPanel>
+        <Viewbox>
+            <Grid Margin="10">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding LastNumber}" Value="0">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Ellipse Fill="LightGreen" Height="20" Width="20" />
+                <TextBlock Text="{Binding LastNumber}" TextAlignment="Center" FontWeight="Bold" Margin="3" />
+            </Grid>
+        </Viewbox>
+    </Grid>
+</UserControl>

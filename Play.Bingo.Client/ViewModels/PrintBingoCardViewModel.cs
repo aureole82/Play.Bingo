@@ -30,7 +30,7 @@ namespace Play.Bingo.Client.ViewModels
                     .Select((card, i) =>
                         new KeyValuePair<string, BingoCardModel>(string.Format("{0:D5}.card", i + 1), card))
                     .ToDictionary(pair => pair.Key, pair => pair.Value)
-                : _storage.Load();
+                : _storage.LoadCards();
 
             TotalPages = Convert.ToInt32(Math.Ceiling((double) _allCards.Count/PageSize));
             FillPage();

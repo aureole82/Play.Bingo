@@ -79,6 +79,7 @@
     <Compile Include="Models\BingoCardModelTests.cs">
       <DependentUpon>BingoCardModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\BingoGameModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\IMessageService.cs" />
     <Compile Include="Services\IStorageService.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Services\StorageService.cs" />
     <Compile Include="ViewModels\BingoCardViewModel.cs" />
     <Compile Include="ViewModels\BingoColumnViewModel.cs" />
+    <Compile Include="ViewModels\BingoGameViewModel.cs" />
     <Compile Include="ViewModels\PrintBingoCardViewModel.cs" />
     <Compile Include="ViewModels\QrCodeViewModel.cs" />
     <Compile Include="ViewModels\SelectBingoCardViewModel.cs" />
@@ -100,6 +102,9 @@
     </Compile>
     <Compile Include="Views\CaptureQrCodeView.xaml.cs">
       <DependentUpon>CaptureQrCodeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BingoGameView.xaml.cs">
+      <DependentUpon>BingoGameView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\QrCodeView.xaml.cs">
       <DependentUpon>QrCodeView.xaml</DependentUpon>
@@ -134,6 +139,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CaptureQrCodeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BingoGameView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -208,6 +217,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\QrCode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Play.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -7,9 +7,15 @@ namespace Play.Bingo.Client.Services
     public interface IStorageService
     {
         /// <summary> Store the Bingo card somewhere. </summary>
-        void Save(BingoCardModel card);
+        void SaveCard(BingoCardModel card);
 
         /// <summary> Give me all the Bingo cards you've stored. </summary>
-        IDictionary<string, BingoCardModel> Load();
+        IDictionary<string, BingoCardModel> LoadCards();
+
+        /// <summary> Loads the last game. </summary>
+        BingoGameModel[] LoadGames();
+
+        /// <summary> Save game. </summary>
+        void SaveGame(BingoGameModel game);
     }
 }
