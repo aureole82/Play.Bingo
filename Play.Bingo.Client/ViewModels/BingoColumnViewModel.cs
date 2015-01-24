@@ -1,4 +1,7 @@
-﻿namespace Play.Bingo.Client.ViewModels
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Play.Bingo.Client.ViewModels
 {
     public class BingoColumnViewModel : ViewModelBase
     {
@@ -6,17 +9,20 @@
         {
         }
 
-        public BingoColumnViewModel(char caption, int[] numbers)
+        public BingoColumnViewModel(char caption, IEnumerable<int> numbers)
         {
             Caption = caption;
-            Numbers = numbers;
+            Numbers = numbers.Select(n => new BingoNumber {Number = n}).ToArray();
+
+            if (!IsInDesignMode)return;
+            Numbers.Skip(1).First().IsMarked = true;
         }
 
         #region Bindable properties and commands.
 
         private char _caption;
 
-        public int[] Numbers { get; private set; }
+        public BingoNumber[] Numbers { get; private set; }
 
         public char Caption
         {
@@ -30,5 +36,20 @@
         }
 
         #endregion
+
+        public void Mark(IEnumerable<int> markedNumbers)
+        {
+            foreach (var markedNumber in markedNumbers)
+            {
+                var found = Numbers.FirstOrDefault(n => n.Number == markedNumber);
+                if (found != null) found.IsMarked = true;
+            }
+        }
+    }
+
+    public class BingoNumber
+    {
+        public int Number { get; set; }
+        public bool IsMarked { get; set; }
     }
 }

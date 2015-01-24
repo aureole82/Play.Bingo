@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Play.Bingo.Client.Helper;
 using Play.Bingo.Client.Models;
 
@@ -52,5 +53,13 @@ namespace Play.Bingo.Client.ViewModels
         #region Private helper methods.
 
         #endregion
+
+        public void Mark(List<int> numbers)
+        {
+            foreach (var column in Columns)
+            {
+                column.Mark(numbers);
+            }
+        }
     }
 }

@@ -54,6 +54,7 @@ namespace Play.Bingo.Client.ViewModels
         #region Private helper methods.
 
         private bool _saved;
+        private BingoGameViewModel _lastGame;
 
         private void Generate()
         {
@@ -64,6 +65,10 @@ namespace Play.Bingo.Client.ViewModels
         private void ShowCard(BingoCardViewModel card)
         {
             CurrentViewModel = card;
+            if (_lastGame!=null)
+            {
+                card.Mark(_lastGame.Game.Numbers);
+            }
             _saved = true;
         }
 
@@ -119,7 +124,8 @@ namespace Play.Bingo.Client.ViewModels
             }
             var bingoGameModel =
                 _storage.LoadGames().Where(g => !g.IsFinished).OrderByDescending(g => g.OpenedAt).LastOrDefault();
-            CurrentViewModel = new BingoGameViewModel(bingoGameModel ?? new BingoGameModel());
+            _lastGame = new BingoGameViewModel(bingoGameModel ?? new BingoGameModel());
+            CurrentViewModel = _lastGame;
         }
 
         private void EnterKey(Key key)

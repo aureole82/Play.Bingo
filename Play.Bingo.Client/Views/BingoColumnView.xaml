@@ -22,9 +22,9 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="Gray" BorderThickness="1" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}">
+                    <Border x:Name="BackgroundBorder" BorderBrush="Gray" BorderThickness="1" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}">
                         <Grid>
-                            <TextBlock Name="NumberTextBlock"  Text="{Binding}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" />
+                            <TextBlock Name="NumberTextBlock" Text="{Binding Number}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" />
                             <Viewbox Name="JokerViewbox" Visibility="Collapsed" >
                                 <TextBlock Text="Joker">
                                     <TextBlock.LayoutTransform>
@@ -32,13 +32,15 @@
                                     </TextBlock.LayoutTransform>
                                 </TextBlock>
                             </Viewbox>
-                            
                         </Grid>
                     </Border>
                     <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding}" Value="0">
+                        <DataTrigger Binding="{Binding Number}" Value="0">
                             <Setter TargetName="JokerViewbox" Property="Visibility" Value="Visible" />
                             <Setter TargetName="NumberTextBlock" Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsMarked}" Value="True">
+                            <Setter TargetName="BackgroundBorder" Property="Background" Value="{StaticResource HighlightBrush}" />
                         </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
