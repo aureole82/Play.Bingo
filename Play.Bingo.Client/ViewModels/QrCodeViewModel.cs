@@ -4,7 +4,6 @@ using System.Drawing.Imaging;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Play.Bingo.Client.Helper;
-using QRCoder;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Play.Bingo.Client.ViewModels
@@ -53,8 +52,8 @@ namespace Play.Bingo.Client.ViewModels
 
         private void GenerateCode(byte[] binary)
         {
-            var qrGenerator = new QRCodeGenerator();
-            var qrCode = qrGenerator.CreateQrCode(Convert.ToBase64String(binary), QRCodeGenerator.ECCLevel.Q);
+            var qrGenerator = new QrCodeGenerator();
+            var qrCode = qrGenerator.CreateQrCode(Convert.ToBase64String(binary), QrCodeGenerator.EccLevel.Q);
             var bitmap = qrCode.GetGraphic(20);
             var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
 

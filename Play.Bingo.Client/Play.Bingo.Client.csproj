@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Play.Bingo.Client</RootNamespace>
     <AssemblyName>Play.Bingo.Client</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -41,9 +41,6 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="QRCoder">
-      <HintPath>..\libs\QRCoder.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -66,6 +63,7 @@
     </ApplicationDefinition>
     <Compile Include="Helper\CardGenerator.cs" />
     <Compile Include="Helper\CardToQrConverter.cs" />
+    <Compile Include="Helper\QrCodeGenerator.cs" />
     <Compile Include="Helper\EnumerableExtensions.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Models\BingoCardModel.cs" />
