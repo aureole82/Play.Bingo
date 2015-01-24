@@ -10,6 +10,7 @@ namespace Play.Bingo.Client.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly IMessageService _messenger = App.Messenger;
+        private readonly ISolver _solver = App.Solver;
         private readonly IStorageService _storage = App.Storage;
 
         public MainViewModel()
@@ -30,6 +31,8 @@ namespace Play.Bingo.Client.ViewModels
 
         private ViewModelBase _currentViewModel;
 
+        private bool _isWinner;
+
         public ViewModelBase CurrentViewModel
         {
             get { return _currentViewModel; }
@@ -37,6 +40,17 @@ namespace Play.Bingo.Client.ViewModels
             {
                 if (_currentViewModel == value) return;
                 _currentViewModel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsWinner
+        {
+            get { return _isWinner; }
+            set
+            {
+                if (_isWinner == value) return;
+                _isWinner = value;
                 RaisePropertyChanged();
             }
         }
@@ -53,8 +67,8 @@ namespace Play.Bingo.Client.ViewModels
 
         #region Private helper methods.
 
-        private bool _saved;
         private BingoGameViewModel _lastGame;
+        private bool _saved;
 
         private void Generate()
         {
@@ -65,9 +79,18 @@ namespace Play.Bingo.Client.ViewModels
         private void ShowCard(BingoCardViewModel card)
         {
             CurrentViewModel = card;
-            if (_lastGame!=null)
+            if (_lastGame != null)
             {
                 card.Mark(_lastGame.Game.Numbers);
+                IsWinner = _solver.IsSolved(_lastGame.Game.Numbers, card.Card);
+                if (IsWinner)
+                {
+                    new Thread(() =>
+                    {
+                        Thread.Sleep(10000);
+                        IsWinner = false;
+                    }).Start();
+                }
             }
             _saved = true;
         }

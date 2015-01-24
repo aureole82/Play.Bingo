@@ -119,6 +119,8 @@ namespace Play.Bingo.Client.ViewModels
                 LastNumber = 0;
                 return;
             }
+            if (_inputs.Count == 0) return;
+
             var lastNumber = _inputs.Pop();
             var container = DetermineContainer(lastNumber);
             if (container.Contains(lastNumber))

@@ -78,5 +78,23 @@
                 <Image Source="Images/Random.png" />
             </Button>
         </StackPanel>
+
+        <Viewbox Grid.Column="0">
+            <Viewbox.Style>
+                <Style TargetType="Viewbox">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsWinner}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Viewbox.Style>
+            <TextBlock  Text="Winner!" FontWeight="Bold">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="330" />
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+        </Viewbox>
     </Grid>
 </Window>

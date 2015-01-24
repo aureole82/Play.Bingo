@@ -82,6 +82,7 @@
     <Compile Include="Models\BingoGameModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\IMessageService.cs" />
+    <Compile Include="Services\ISolver.cs" />
     <Compile Include="Services\IStorageService.cs" />
     <Compile Include="Services\MessageService.cs" />
     <Compile Include="Services\StorageService.cs" />
