@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
+using System.Linq;
+using System.Timers;
 using System.Windows;
-using WPFMediaKit.DirectShow.MediaPlayers;
 
 namespace Play.Bingo.Client.Views
 {
@@ -8,7 +9,9 @@ namespace Play.Bingo.Client.Views
     public partial class WebcamView
     {
         public static readonly DependencyProperty SnapshotProperty =
-            DependencyProperty.Register("Snapshot", typeof (Bitmap), typeof (WebcamView));
+            DependencyProperty.Register("Snapshot", typeof(Bitmap), typeof(WebcamView));
+
+        private Timer _timer;
 
         public WebcamView()
         {
@@ -21,9 +24,34 @@ namespace Play.Bingo.Client.Views
             set { SetValue(SnapshotProperty, value); }
         }
 
-        private void CaptureSnapshot(object sender, VideoSampleArgs e)
+        private void WebcamView_OnLoaded(object sender, RoutedEventArgs e)
         {
-            Application.Current.Dispatcher.Invoke(() => Snapshot = e.VideoFrame); 
+            var videoCaptureDevices = WebCameraControl.GetVideoCaptureDevices();
+            var device = videoCaptureDevices.FirstOrDefault();
+            if (device == null) return;
+
+            WebCameraControl.StartCapture(device);
+
+            // Pin control to height/width of the camera input (and let the ViewBox scale).
+            WebCameraBorder.Height = WebCameraControl.VideoSize.Height;
+            WebCameraBorder.Width = WebCameraControl.VideoSize.Width;
+
+            if (_timer == null)
+            {
+                _timer = new Timer
+                {
+                    Interval = 500
+                };
+                _timer.Elapsed += (o, args) =>
+                        Application.Current.Dispatcher.Invoke(() => Snapshot = WebCameraControl.GetCurrentImage());
+            }
+            _timer.Start();
+        }
+
+        private void WebcamView_OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            _timer.Stop();
+            WebCameraControl.StopCapture();
         }
     }
 }

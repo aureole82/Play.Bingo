@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Play.Bingo.Client.Models;
-using WPFMediaKit.DirectShow.Interop;
 
 namespace Play.Bingo.Client.Services
 {
