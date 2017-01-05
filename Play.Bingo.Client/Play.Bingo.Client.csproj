@@ -195,31 +195,10 @@
     <Resource Include="Images\Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Random.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Save.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Open.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Print.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Preview.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Down.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Up.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\QrCode.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Play.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

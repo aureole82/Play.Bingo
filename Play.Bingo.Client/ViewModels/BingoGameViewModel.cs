@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
-using System.Windows.Input;
 using Play.Bingo.Client.Helper;
 using Play.Bingo.Client.Models;
 using Play.Bingo.Client.Services;
@@ -23,7 +23,9 @@ namespace Play.Bingo.Client.ViewModels
 
         public BingoGameViewModel(BingoGameModel game)
         {
-            _messenger.Subscribe<Key>(KeyEntered);
+            _messenger.Subscribe<int>(NumberEntered);
+            _messenger.Subscribe<RoundMessage>(NextRound);
+
             B = new ObservableCollection<int>();
             I = new ObservableCollection<int>();
             N = new ObservableCollection<int>();
@@ -74,42 +76,71 @@ namespace Play.Bingo.Client.ViewModels
 
         #region Private helper methods.
 
-        private void KeyEntered(Key key)
+        private void NumberEntered(int number)
         {
-            int number;
-            if (TryParse(key, out number))
-            {
-                if (LastNumber > 9)
-                {
-                    AddNumber(LastNumber);
-                    LastNumber = number;
-                }
-                else
-                {
-                    var lastNumber = LastNumber*10 + number;
-                    LastNumber = lastNumber;
-                    new Thread(() =>
-                    {
-                        Thread.Sleep(5000);
-                        if (LastNumber > 0 && lastNumber == LastNumber)
-                        {
-                            UiInvoke(() => AddNumber(lastNumber));
-                            LastNumber = 0;
-                        }
-                    }).Start();
-                }
-            }
-
-            if (key == Key.Tab)
+            if (LastNumber > 9)
             {
                 AddNumber(LastNumber);
-                LastNumber = 0;
-                return;
+                LastNumber = number;
             }
-            if (key == Key.Back)
+            else
             {
-                Reverse();
+                var lastNumber = LastNumber*10 + number;
+                if (lastNumber > 75)
+                {
+                    LastNumber = 0;
+                    return;
+                }
+                Announce(lastNumber);
             }
+        }
+
+        private void NextRound(RoundMessage message)
+        {
+            switch (message.Action)
+            {
+                case GameAction.Next:
+                    var next = Next();
+                    if (next > 0) Announce(next);
+                    return;
+                case GameAction.Accept:
+                    AddNumber(LastNumber);
+                    LastNumber = 0;
+                    return;
+                case GameAction.Revert:
+                    Reverse();
+                    break;
+            }
+        }
+
+        private readonly IReadOnlyCollection<int> _allNumbers =
+            new ReadOnlyCollection<int>(Enumerable.Range(1, 75).ToList());
+
+        private readonly Random _random = new Random(DateTime.Now.Ticks.GetHashCode());
+
+        private int Next()
+        {
+            var next = _allNumbers
+                .Except(_game.Numbers)
+                .Shuffle(_random)
+                .FirstOrDefault();
+            return next;
+        }
+
+        private void Announce(int number)
+        {
+            if (LastNumber > 0)
+                AddNumber(LastNumber);
+
+            LastNumber = number;
+            new Thread(() =>
+            {
+                Thread.Sleep(3000);
+                if ((LastNumber <= 0) || (number != LastNumber)) return;
+
+                UiInvoke(() => AddNumber(number));
+                LastNumber = 0;
+            }).Start();
         }
 
         private void Reverse()
@@ -129,15 +160,6 @@ namespace Play.Bingo.Client.ViewModels
                 Save();
             }
         }
-
-        private static bool TryParse(Key key, out int number)
-        {
-            var value = (int) key;
-            var isNumeric = value >= 34 && value <= 43;
-            number = isNumeric ? value - 34 : default(int);
-            return isNumeric;
-        }
-
 
         private void AddNumber(int number)
         {
@@ -188,5 +210,22 @@ namespace Play.Bingo.Client.ViewModels
         }
 
         #endregion
+    }
+
+    internal class RoundMessage
+    {
+        public RoundMessage(GameAction action)
+        {
+            Action = action;
+        }
+
+        public GameAction Action { get; }
+    }
+
+    internal enum GameAction
+    {
+        Accept,
+        Next,
+        Revert
     }
 }

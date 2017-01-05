@@ -6,18 +6,19 @@
         Title="Bingo" Height="800" Width="1010" Icon="Images\Icon.ico"
         DataContext="{StaticResource MainViewModel}">
     <Window.InputBindings>
-        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D0}" Key="D0" />
-        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D1}" Key="D1" />
-        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D2}" Key="D2" />
-        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D3}" Key="D3" />
-        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D4}" Key="D4" />
-        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D5}" Key="D5" />
-        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D6}" Key="D6" />
-        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D7}" Key="D7" />
-        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D8}" Key="D8" />
-        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.D9}" Key="D9" />
-        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.Tab}" Key="Tab" />
-        <KeyBinding Command="{Binding EnterKeyCommand}" CommandParameter="{x:Static Key.Back}" Key="Back" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.D0}" Key="D0" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.D1}" Key="D1" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.D2}" Key="D2" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.D3}" Key="D3" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.D4}" Key="D4" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.D5}" Key="D5" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.D6}" Key="D6" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.D7}" Key="D7" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.D8}" Key="D8" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.D9}" Key="D9" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.Insert}" Key="Insert" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.Tab}" Key="Tab" />
+        <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.Back}" Key="Back" />
     </Window.InputBindings>
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:BingoCardViewModel}">
@@ -47,36 +48,38 @@
         </Grid.ColumnDefinitions>
         <ContentControl Grid.ColumnSpan="2" Content="{Binding CurrentViewModel}" />
         <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
+            <StackPanel.Resources>
+            </StackPanel.Resources>
+            <Button Width="58" ToolTip="New game!"
+                    Style="{StaticResource MainButtonStyle}"
+                    Command="{Binding NewCommand}"
+                    FontFamily="Wingdings 3"
+                    Content="Q" />
             <Button Width="58" ToolTip="Play game!"
-                    Style="{StaticResource FlatButtonStyle}"
-                    Command="{Binding PlayCommand}">
-                <Image Source="Images/Play.png" />
+                    Style="{StaticResource MainButtonStyle}"
+                    Command="{Binding PlayCommand}"
+                    Content="µ">
             </Button>
+            <Button Width="58" ToolTip="Scan card!"
+                    Style="{StaticResource MainButtonStyle}"
+                    Command="{Binding ScanCommand}"
+                    Content="9" />
             <Button Width="58" ToolTip="Print card!"
-                    Style="{StaticResource FlatButtonStyle}"
-                    Command="{Binding PrintPreviewCommand}" >
-                <Image Source="Images/Preview.png" />
-            </Button>
-            <Button Width="58" ToolTip="Solve card!"
-                    Style="{StaticResource FlatButtonStyle}"
-                    Command="{Binding SolveCommand}" >
-                <Image Source="Images/QrCode.png" />
-            </Button>
+                    Style="{StaticResource MainButtonStyle}"
+                    Command="{Binding PrintPreviewCommand}"
+                    Content="&amp;" />
             <Button Width="58" ToolTip="Open card!"
-                    Style="{StaticResource FlatButtonStyle}"
-                    Command="{Binding OpenCommand}" >
-                <Image Source="Images/Open.png" />
-            </Button>
+                    Style="{StaticResource MainButtonStyle}"
+                    Command="{Binding OpenCommand}"
+                    Content="1" />
             <Button Width="58" ToolTip="Save card!"
-                    Style="{StaticResource FlatButtonStyle}"
-                    Command="{Binding SaveCommand}" >
-                <Image Source="Images/Save.png" />
-            </Button>
+                    Style="{StaticResource MainButtonStyle}"
+                    Command="{Binding SaveCommand}"
+                    Content="&lt;" />
             <Button Width="58" ToolTip="Generate new card!"
-                    Style="{StaticResource FlatButtonStyle}"
-                    Command="{Binding GenerateCommand}" >
-                <Image Source="Images/Random.png" />
-            </Button>
+                    Style="{StaticResource MainButtonStyle}"
+                    Command="{Binding GenerateCommand}"
+                    Content="3" />
         </StackPanel>
 
         <Viewbox Grid.Column="0">
@@ -90,7 +93,7 @@
                     </Style.Triggers>
                 </Style>
             </Viewbox.Style>
-            <TextBlock  Text="Winner!" FontWeight="Bold">
+            <TextBlock Text="Winner!" FontWeight="Bold">
                 <TextBlock.LayoutTransform>
                     <RotateTransform Angle="330" />
                 </TextBlock.LayoutTransform>

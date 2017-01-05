@@ -18,15 +18,16 @@ namespace Play.Bingo.Client.ViewModels
             GenerateCommand = new RelayCommand(Generate);
             SaveCommand = new RelayCommand(Save, CanSave);
             OpenCommand = new RelayCommand(Open);
-            SolveCommand = new RelayCommand(Solve);
+            ScanCommand = new RelayCommand(Scan);
             PrintPreviewCommand = new RelayCommand(PrintPreview);
             PlayCommand = new RelayCommand(Play);
-            EnterKeyCommand = new RelayCommand<Key>(EnterKey);
+            NewCommand=new RelayCommand(New);
+                KeyEnteredCommand = new RelayCommand<Key>(KeyEntered);
 
             Generate();
             _messenger.Subscribe<BingoCardViewModel>(ShowCard);
         }
-
+        
         #region Bindable properties and commands.
 
         private ViewModelBase _currentViewModel;
@@ -55,13 +56,14 @@ namespace Play.Bingo.Client.ViewModels
             }
         }
 
-        public RelayCommand GenerateCommand { get; private set; }
-        public RelayCommand SaveCommand { get; private set; }
-        public RelayCommand OpenCommand { get; private set; }
-        public RelayCommand SolveCommand { get; private set; }
-        public RelayCommand PrintPreviewCommand { get; private set; }
-        public RelayCommand PlayCommand { get; private set; }
-        public RelayCommand<Key> EnterKeyCommand { get; private set; }
+        public ICommand GenerateCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
+        public ICommand OpenCommand { get; private set; }
+        public ICommand ScanCommand { get; private set; }
+        public ICommand PrintPreviewCommand { get; private set; }
+        public ICommand NewCommand { get; private set; }
+        public ICommand PlayCommand { get; private set; }
+        public ICommand KeyEnteredCommand { get; private set; }
 
         #endregion
 
@@ -109,7 +111,7 @@ namespace Play.Bingo.Client.ViewModels
             _saved = true;
         }
 
-        private void Solve()
+        private void Scan()
         {
             CurrentViewModel = new CaptureQrCodeViewModel();
         }
@@ -137,7 +139,7 @@ namespace Play.Bingo.Client.ViewModels
             CurrentViewModel = new PrintBingoCardViewModel();
         }
 
-        private void Play()
+        private void New()
         {
             var runningBingoGame = CurrentViewModel as BingoGameViewModel;
             if (runningBingoGame != null)
@@ -145,15 +147,64 @@ namespace Play.Bingo.Client.ViewModels
                 runningBingoGame.Game.IsFinished = true;
                 runningBingoGame.Save();
             }
-            var bingoGameModel =
-                _storage.LoadGames().Where(g => !g.IsFinished).OrderByDescending(g => g.OpenedAt).LastOrDefault();
+
+            var bingoGameModel = _storage.LoadGames()
+                .Where(g => !g.IsFinished)
+                .OrderByDescending(g => g.OpenedAt)
+                .LastOrDefault();
             _lastGame = new BingoGameViewModel(bingoGameModel ?? new BingoGameModel());
             CurrentViewModel = _lastGame;
         }
 
-        private void EnterKey(Key key)
+        private void Play()
         {
-            _messenger.Publish(key);
+            var runningBingoGame = CurrentViewModel as BingoGameViewModel;
+            if (runningBingoGame != null)
+            {
+                _messenger.Publish(new RoundMessage(GameAction.Next));
+                return;
+            }
+
+            New();
+        }
+
+        private void KeyEntered(Key key)
+        {
+            int number;
+            if (TryParse(key, out number))
+            {
+                _messenger.Publish(number);
+                return;
+            }
+
+            switch (key)
+            {
+                case Key.Insert:
+                    _messenger.Publish(new RoundMessage(GameAction.Next));
+                    return;
+                case Key.Back:
+                    _messenger.Publish(new RoundMessage(GameAction.Revert));
+                    return;
+                case Key.Tab:
+                    _messenger.Publish(new RoundMessage(GameAction.Accept));
+                    return;
+            }
+        }
+
+        private static bool TryParse(Key key, out int number)
+        {
+            if ((key >= Key.D0) && (key <= Key.D9))
+            {
+                number = key - Key.D0;
+                return true;
+            }
+            if ((key >= Key.NumPad0) && (key <= Key.NumPad9))
+            {
+                number = key - Key.NumPad0;
+                return true;
+            }
+            number = 0;
+            return false;
         }
 
         #endregion
