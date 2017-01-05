@@ -46,10 +46,9 @@
             <ColumnDefinition />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <ContentControl Grid.ColumnSpan="2" Content="{Binding CurrentViewModel}" />
+        <ContentControl Grid.ColumnSpan="2" HorizontalAlignment="Left"
+                        Content="{Binding CurrentViewModel}" />
         <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
-            <StackPanel.Resources>
-            </StackPanel.Resources>
             <Button Width="58" ToolTip="New game!"
                     Style="{StaticResource MainButtonStyle}"
                     Command="{Binding NewCommand}"

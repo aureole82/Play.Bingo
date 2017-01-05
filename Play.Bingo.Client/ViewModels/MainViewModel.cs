@@ -21,13 +21,13 @@ namespace Play.Bingo.Client.ViewModels
             ScanCommand = new RelayCommand(Scan);
             PrintPreviewCommand = new RelayCommand(PrintPreview);
             PlayCommand = new RelayCommand(Play);
-            NewCommand=new RelayCommand(New);
-                KeyEnteredCommand = new RelayCommand<Key>(KeyEntered);
+            NewCommand = new RelayCommand(New);
+            KeyEnteredCommand = new RelayCommand<Key>(KeyEntered);
 
-            Generate();
+            Play();
             _messenger.Subscribe<BingoCardViewModel>(ShowCard);
         }
-        
+
         #region Bindable properties and commands.
 
         private ViewModelBase _currentViewModel;

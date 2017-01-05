@@ -61,7 +61,7 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <Ellipse Fill="LightGreen" Height="20" Width="20" />
+                <Ellipse Fill="LightGreen" Height="20" Width="20" Stroke="White" />
                 <TextBlock Text="{Binding LastNumber}" TextAlignment="Center" FontWeight="Bold" Margin="3" />
             </Grid>
         </Viewbox>

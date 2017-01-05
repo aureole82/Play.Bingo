@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="Play.Bingo.Client.Views.PrintBingoCardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:Play.Bingo.Client.ViewModels"
              xmlns:v="clr-namespace:Play.Bingo.Client.Views"
@@ -17,7 +17,8 @@
             <ColumnDefinition />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <ItemsControl Name="PrintArea" ItemsSource="{Binding Cards}" vm:PrintBingoCardViewModel.PrintArea="{Binding ElementName=PrintArea}">
+        <ItemsControl Name="PrintArea" ItemsSource="{Binding Cards}"
+                      vm:PrintBingoCardViewModel.PrintArea="{Binding ElementName=PrintArea}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel />
@@ -38,10 +39,11 @@
                             <v:BingoCardView Grid.ColumnSpan="2" MinHeight="180" />
                             <StackPanel Grid.Column="0" Grid.Row="1">
                                 <TextBlock FontSize="8" Text="{Binding Id}" FontFamily="Consolas" />
-                                <TextBlock FontSize="8" Text="{Binding Filename}" FontFamily="Consolas"  />
+                                <TextBlock FontSize="8" Text="{Binding Filename}" FontFamily="Consolas" />
                             </StackPanel>
-                            <v:QrCodeView Grid.Column="1" Grid.Row="1" Height="80" Width="80" HorizontalAlignment="Left"
-                                          DataContext="{Binding Converter={StaticResource CardToQrConverter}}"/>
+                            <v:QrCodeView Grid.Column="1" Grid.Row="1" Height="80" Width="80"
+                                          HorizontalAlignment="Left"
+                                          DataContext="{Binding Converter={StaticResource CardToQrConverter}}" />
                         </Grid>
                     </Viewbox>
                 </DataTemplate>
@@ -49,15 +51,15 @@
         </ItemsControl>
         <StackPanel Grid.Column="1" VerticalAlignment="Top">
             <Button Width="58" ToolTip="Print page!"
-                    Style="{StaticResource FlatButtonStyle}"
-                    Command="{Binding PrintCommand}" >
-                <Image Source="../Images/Print.png" />
-            </Button>
+                    Style="{StaticResource MainButtonStyle}"
+                    Command="{Binding PrintCommand}"
+                    FontFamily="Wingdings 2"
+                    Content="6" />
             <Button Width="58" ToolTip="Previous page!"
-                    Style="{StaticResource FlatButtonStyle}"
-                    Command="{Binding PreviousCommand}" >
-                <Image Source="../Images/Up.png" />
-            </Button>
+                    Style="{StaticResource MainButtonStyle}"
+                    Command="{Binding PreviousCommand}"
+                    FontFamily="Wingdings 3"
+                    Content="p" />
             <Border>
                 <TextBlock HorizontalAlignment="Center" FontWeight="Bold">
                     <Run Text="{Binding Page, Mode=OneWay}" />
@@ -66,10 +68,10 @@
                 </TextBlock>
             </Border>
             <Button Width="58" ToolTip="Next page!"
-                    Style="{StaticResource FlatButtonStyle}"
-                    Command="{Binding NextCommand}" >
-                <Image Source="../Images/Down.png" />
-            </Button>
+                    Style="{StaticResource MainButtonStyle}"
+                    Command="{Binding NextCommand}"
+                    FontFamily="Wingdings 3"
+                    Content="q" />
         </StackPanel>
     </Grid>
 
