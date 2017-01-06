@@ -155,7 +155,7 @@ namespace Play.Bingo.Client.ViewModels
                 .OrderByDescending(g => g.OpenedAt)
                 .FirstOrDefault();
 
-            CurrentViewModel = _currentGameViewModel = new BingoGameViewModel(bingoGameModel ?? new BingoGameModel());
+            CurrentViewModel = _currentGameViewModel = new BingoGameViewModel(bingoGameModel ?? new BingoGameModel(), _messenger, _storage);
         }
 
         private void Play()

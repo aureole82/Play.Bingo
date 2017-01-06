@@ -69,6 +69,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helper\BingoExtensions.cs" />
     <Compile Include="Helper\CardGenerator.cs" />
     <Compile Include="Helper\CardToQrConverter.cs" />
     <Compile Include="Helper\QrCodeGenerator.cs" />
