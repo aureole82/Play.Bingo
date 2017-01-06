@@ -9,6 +9,7 @@ namespace Play.Bingo.Client.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        private readonly CaptureQrCodeViewModel _captureQrCodeViewModel= new CaptureQrCodeViewModel();
         private readonly IMessageService _messenger = App.Messenger;
         private readonly ISolver _solver = App.Solver;
         private readonly IStorageService _storage = App.Storage;
@@ -69,7 +70,7 @@ namespace Play.Bingo.Client.ViewModels
 
         #region Private helper methods.
 
-        private BingoGameViewModel _lastGame;
+        private BingoGameViewModel _currentGameViewModel;
         private bool _saved;
 
         private void Generate()
@@ -81,10 +82,10 @@ namespace Play.Bingo.Client.ViewModels
         private void ShowCard(BingoCardViewModel card)
         {
             CurrentViewModel = card;
-            if (_lastGame != null)
+            if (_currentGameViewModel != null)
             {
-                card.Mark(_lastGame.Game.Numbers);
-                IsWinner = _solver.IsSolved(_lastGame.Game.Numbers, card.Card);
+                card.Mark(_currentGameViewModel.Game.Numbers);
+                IsWinner = _solver.IsSolved(_currentGameViewModel.Game.Numbers, card.Card);
                 if (IsWinner)
                 {
                     new Thread(() =>
@@ -113,7 +114,7 @@ namespace Play.Bingo.Client.ViewModels
 
         private void Scan()
         {
-            CurrentViewModel = new CaptureQrCodeViewModel();
+            CurrentViewModel = _captureQrCodeViewModel;
         }
 
         private void Open()
@@ -141,31 +142,37 @@ namespace Play.Bingo.Client.ViewModels
 
         private void New()
         {
-            var runningBingoGame = CurrentViewModel as BingoGameViewModel;
-            if (runningBingoGame != null)
+            if (_currentGameViewModel != null)
             {
-                runningBingoGame.Game.IsFinished = true;
-                runningBingoGame.Save();
+                _currentGameViewModel.Game.IsFinished = true;
+                _currentGameViewModel.Save();
+                _currentGameViewModel.Dispose();
+                _currentGameViewModel = null;
             }
 
             var bingoGameModel = _storage.LoadGames()
                 .Where(g => !g.IsFinished)
                 .OrderByDescending(g => g.OpenedAt)
-                .LastOrDefault();
-            _lastGame = new BingoGameViewModel(bingoGameModel ?? new BingoGameModel());
-            CurrentViewModel = _lastGame;
+                .FirstOrDefault();
+
+            CurrentViewModel = _currentGameViewModel = new BingoGameViewModel(bingoGameModel ?? new BingoGameModel());
         }
 
         private void Play()
         {
-            var runningBingoGame = CurrentViewModel as BingoGameViewModel;
-            if (runningBingoGame != null)
+            if (_currentGameViewModel == null)
             {
-                _messenger.Publish(new RoundMessage(GameAction.Next));
+                New();
                 return;
             }
 
-            New();
+            if (!(CurrentViewModel is BingoGameViewModel))
+            {
+                CurrentViewModel = _currentGameViewModel;
+                return;
+            }
+
+            _messenger.Publish(new RoundMessage(GameAction.Next));
         }
 
         private void KeyEntered(Key key)

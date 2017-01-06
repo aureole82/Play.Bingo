@@ -1,4 +1,6 @@
-﻿using Play.Bingo.Client.Services;
+﻿using System.Collections.Generic;
+using Play.Bingo.Client.Models;
+using Play.Bingo.Client.Services;
 
 namespace Play.Bingo.Client
 {
@@ -11,9 +13,10 @@ namespace Play.Bingo.Client
             Storage = new StorageService();
             Messenger = new MessageService();
             Solver = new Solver();
-            Solver.AddRule(new ColumnRule());
-            Solver.AddRule(new RowRule());
-            Solver.AddRule(new DiagonalRule());
+            //Solver.AddRule(new ColumnRule());
+            //Solver.AddRule(new RowRule());
+            //Solver.AddRule(new DiagonalRule());
+            Solver.AddRule(new AllRule());
         }
 
         public static IStorageService Storage { get; private set; }

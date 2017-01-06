@@ -9,7 +9,7 @@ using Play.Bingo.Client.Services;
 
 namespace Play.Bingo.Client.ViewModels
 {
-    public class BingoGameViewModel : ViewModelBase
+    public class BingoGameViewModel : ViewModelBase, IDisposable
     {
         private readonly Stack<int> _inputs = new Stack<int>();
         private readonly IMessageService _messenger = App.Messenger;
@@ -23,7 +23,7 @@ namespace Play.Bingo.Client.ViewModels
 
         public BingoGameViewModel(BingoGameModel game)
         {
-            _messenger.Subscribe<int>(NumberEntered);
+            _messenger.Subscribe<int>(DigitEntered);
             _messenger.Subscribe<RoundMessage>(NextRound);
 
             B = new ObservableCollection<int>();
@@ -36,8 +36,15 @@ namespace Play.Bingo.Client.ViewModels
 
             foreach (var number in game.Numbers.Distinct())
             {
-                AddNumber(number);
+                LastNumber = number;
+                AddNumber();
             }
+        }
+
+        public void Dispose()
+        {
+            _messenger.Unsubscribe<int>(DigitEntered);
+            _messenger.Unsubscribe<RoundMessage>(NextRound);
         }
 
         #region Bindable properties and commands.
@@ -76,22 +83,22 @@ namespace Play.Bingo.Client.ViewModels
 
         #region Private helper methods.
 
-        private void NumberEntered(int number)
+        private void DigitEntered(int digit)
         {
             if (LastNumber > 9)
             {
-                AddNumber(LastNumber);
-                LastNumber = number;
+                AddNumber();
+                LastNumber = digit;
             }
             else
             {
-                var lastNumber = LastNumber*10 + number;
-                if (lastNumber > 75)
+                LastNumber = LastNumber*10 + digit;
+                if (LastNumber > 75)
                 {
                     LastNumber = 0;
                     return;
                 }
-                Announce(lastNumber);
+                AddNumberIn3Seconds();
             }
         }
 
@@ -100,12 +107,12 @@ namespace Play.Bingo.Client.ViewModels
             switch (message.Action)
             {
                 case GameAction.Next:
-                    var next = Next();
-                    if (next > 0) Announce(next);
+                    if (LastNumber > 0) AddNumber();
+                    LastNumber = Next();
+                    if (LastNumber > 0) AddNumberIn3Seconds();
                     return;
                 case GameAction.Accept:
-                    AddNumber(LastNumber);
-                    LastNumber = 0;
+                    AddNumber();
                     return;
                 case GameAction.Revert:
                     Reverse();
@@ -117,6 +124,7 @@ namespace Play.Bingo.Client.ViewModels
             new ReadOnlyCollection<int>(Enumerable.Range(1, 75).ToList());
 
         private readonly Random _random = new Random(DateTime.Now.Ticks.GetHashCode());
+        private Thread _thread;
 
         private int Next()
         {
@@ -127,20 +135,18 @@ namespace Play.Bingo.Client.ViewModels
             return next;
         }
 
-        private void Announce(int number)
+        private void AddNumberIn3Seconds()
         {
-            if (LastNumber > 0)
-                AddNumber(LastNumber);
-
-            LastNumber = number;
-            new Thread(() =>
+            _thread?.Abort();
+            _thread = new Thread(() =>
             {
                 Thread.Sleep(3000);
-                if ((LastNumber <= 0) || (number != LastNumber)) return;
+                if (LastNumber <= 0) return;
 
-                UiInvoke(() => AddNumber(number));
-                LastNumber = 0;
-            }).Start();
+                UiInvoke(AddNumber);
+                _thread = null;
+            });
+            _thread.Start();
         }
 
         private void Reverse()
@@ -161,11 +167,12 @@ namespace Play.Bingo.Client.ViewModels
             }
         }
 
-        private void AddNumber(int number)
+        private void AddNumber()
         {
-            var container = DetermineContainer(number);
+            var container = DetermineContainer(LastNumber);
             if (container != null)
-                AddNumber(container, number);
+                AddNumber(container, LastNumber);
+            LastNumber = 0;
         }
 
         private ObservableCollection<int> DetermineContainer(int number)
@@ -197,6 +204,8 @@ namespace Play.Bingo.Client.ViewModels
         private void AddNumber(Collection<int> container, int number)
         {
             if (container.Contains(number)) return;
+
+            Console.WriteLine($@"{nameof(AddNumber)}({number})");
             container.Add(number);
             container.BubbleSort();
             _inputs.Push(number);

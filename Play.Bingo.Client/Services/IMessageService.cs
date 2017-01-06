@@ -12,6 +12,6 @@ namespace Play.Bingo.Client.Services
         void Subscribe<T>(Action<T> handler);
 
         /// <summary> Oh, the subscriber isn't interested anymore. Get rid of him. </summary>
-        void Unubscribe<T>(Action<T> handler);
+        void Unsubscribe<T>(Action<T> handler);
     }
 }

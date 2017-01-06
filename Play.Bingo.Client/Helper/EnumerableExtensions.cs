@@ -35,8 +35,8 @@ namespace Play.Bingo.Client.Helper
 
         public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, Random random)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            if (random == null) throw new ArgumentNullException("random");
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (random == null) throw new ArgumentNullException(nameof(random));
 
             return source.ShuffleIterator(random);
         }

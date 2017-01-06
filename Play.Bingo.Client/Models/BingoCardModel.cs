@@ -31,15 +31,10 @@ namespace Play.Bingo.Client.Models
             O = Pick(numbers, 19, 60);
         }
 
-        #region Bingo numbers.
-
-        public int[] B { get; set; }
-        public int[] I { get; set; }
-        public int[] N { get; set; }
-        public int[] G { get; set; }
-        public int[] O { get; set; }
-
-        #endregion
+        public IEnumerable<int> Numbers
+        {
+            get { return B.Union(I).Union(N.Where(n => n > 0)).Union(G).Union(O).OrderBy(n => n); }
+        }
 
         public byte[] ToBinary()
         {
@@ -55,7 +50,7 @@ namespace Play.Bingo.Client.Models
             {
                 var number1 = numbers[index];
                 var number2 = numbers[index + 1];
-                binary.Add(Convert.ToByte(number1 << 4 | number2));
+                binary.Add(Convert.ToByte((number1 << 4) | number2));
             }
             return binary.ToArray();
         }
@@ -70,6 +65,16 @@ namespace Play.Bingo.Client.Models
                 .Select(n => n + offset)
                 .ToArray();
         }
+
+        #endregion
+
+        #region Bingo numbers.
+
+        public int[] B { get; set; }
+        public int[] I { get; set; }
+        public int[] N { get; set; }
+        public int[] G { get; set; }
+        public int[] O { get; set; }
 
         #endregion
     }

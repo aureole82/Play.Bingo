@@ -47,7 +47,7 @@ namespace Play.Bingo.Client.Services
         {
             if (Complies(numbers, card.B)) return true;
             if (Complies(numbers, card.I)) return true;
-            if (Complies(numbers, card.N.Except(new []{0}).ToArray())) return true;
+            if (Complies(numbers, card.N.Except(new[] {0}).ToArray())) return true;
             if (Complies(numbers, card.G)) return true;
             if (Complies(numbers, card.O)) return true;
             return false;
@@ -96,6 +96,14 @@ namespace Play.Bingo.Client.Services
         private bool Complies(ICollection<int> numbers, int[] row)
         {
             return row.All(numbers.Contains);
+        }
+    }
+
+    public class AllRule : ISolverRule
+    {
+        public bool Complies(ICollection<int> numbers, BingoCardModel card)
+        {
+            return !card.Numbers.Except(numbers).Any();
         }
     }
 }

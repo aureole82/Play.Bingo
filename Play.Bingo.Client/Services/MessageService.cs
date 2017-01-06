@@ -24,7 +24,7 @@ namespace Play.Bingo.Client.Services
             _handlers.Add(handler);
         }
 
-        public void Unubscribe<T>(Action<T> handler)
+        public void Unsubscribe<T>(Action<T> handler)
         {
             _handlers.Remove(handler);
         }

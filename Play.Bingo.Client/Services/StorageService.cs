@@ -75,13 +75,15 @@ namespace Play.Bingo.Client.Services
                     });
                 }
             }
-            return games.OrderByDescending(g => g.OpenedAt).ToArray();
+            return games
+                .OrderByDescending(g => g.OpenedAt)
+                .ToArray();
         }
 
         public void SaveGame(BingoGameModel game)
         {
             var folder = GetFolder();
-            var pathToFile = Path.Combine(folder.FullName, string.Format("{0:yyyyMMddhhmmss}.game", game.OpenedAt));
+            var pathToFile = Path.Combine(folder.FullName, $"{game.OpenedAt:yyyyMMddhhmmss}.game");
             using (var stream = File.OpenWrite(pathToFile))
             {
                 stream.WriteByte((byte) (game.IsFinished ? 1 : 0));
