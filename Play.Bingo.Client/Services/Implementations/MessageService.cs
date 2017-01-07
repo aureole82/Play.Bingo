@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Linq;
 
-namespace Play.Bingo.Client.Services
+namespace Play.Bingo.Client.Services.Implementations
 {
     /// <summary> A very poor implementation of <see cref="IMessageService" />. </summary>
     public class MessageService : IMessageService

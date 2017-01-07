@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Play.Bingo.Client.Models;
 
-namespace Play.Bingo.Client.Services
+namespace Play.Bingo.Client.Services.Implementations
 {
     /// <summary> Saves and loads Bingo cards into the subfolder "Storage". </summary>
     public class StorageService : IStorageService

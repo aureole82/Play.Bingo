@@ -81,11 +81,13 @@
       <DependentUpon>BingoCardModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\BingoGameModel.cs" />
+    <Compile Include="Services\Implementations\DesignStorageService.cs" />
     <Compile Include="Services\IMessageService.cs" />
     <Compile Include="Services\ISolver.cs" />
     <Compile Include="Services\IStorageService.cs" />
-    <Compile Include="Services\MessageService.cs" />
-    <Compile Include="Services\StorageService.cs" />
+    <Compile Include="Services\Implementations\MessageService.cs" />
+    <Compile Include="Services\Implementations\StorageService.cs" />
+    <Compile Include="Services\Implementations\Solver.cs" />
     <Compile Include="ViewModels\BingoCardViewModel.cs" />
     <Compile Include="ViewModels\BingoColumnViewModel.cs" />
     <Compile Include="ViewModels\BingoGameViewModel.cs" />
@@ -195,6 +197,7 @@
   <ItemGroup>
     <Resource Include="Images\Icon.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

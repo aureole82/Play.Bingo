@@ -4,15 +4,19 @@ using System.Windows.Input;
 using Play.Bingo.Client.Helper;
 using Play.Bingo.Client.Models;
 using Play.Bingo.Client.Services;
+using Play.Bingo.Client.Services.Implementations;
 
 namespace Play.Bingo.Client.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly CaptureQrCodeViewModel _captureQrCodeViewModel= new CaptureQrCodeViewModel();
+        private readonly CaptureQrCodeViewModel _captureQrCodeViewModel = new CaptureQrCodeViewModel();
         private readonly IMessageService _messenger = new MessageService();
         private readonly ISolver _solver = new Solver();
-        private readonly IStorageService _storage = new StorageService();
+
+        private readonly IStorageService _storage = IsInDesignMode
+            ? (IStorageService) new DesignStorageService()
+            : new StorageService();
 
         public MainViewModel()
         {
@@ -143,7 +147,9 @@ namespace Play.Bingo.Client.ViewModels
                 .OrderByDescending(g => g.OpenedAt)
                 .FirstOrDefault();
 
-            CurrentViewModel = _currentGameViewModel = new BingoGameViewModel(bingoGameModel ?? new BingoGameModel(), _messenger, _storage);
+            CurrentViewModel =
+                _currentGameViewModel =
+                    new BingoGameViewModel(bingoGameModel ?? new BingoGameModel(), _messenger, _storage);
         }
 
         private void Play()
