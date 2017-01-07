@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:Play.Bingo.Client.ViewModels"
-             HorizontalAlignment="Left"
-             mc:Ignorable="d" d:DesignHeight="300"
+             xmlns:helper="clr-namespace:Play.Bingo.Client.Helper"
+             mc:Ignorable="d" MinHeight="300" MinWidth="300"
              d:DataContext="{d:DesignInstance vm:BingoGameViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
+        <helper:TrimmedListConverter x:Key="TrimmedListConverter" />
         <Style x:Key="ItemsControlStyle" TargetType="ItemsControl">
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="Height" Value="60" />
@@ -28,7 +29,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ItemsControl">
                         <Border>
-                            <Grid>
+                            <Grid Background="{TemplateBinding Background}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition />
@@ -44,14 +45,30 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid MinHeight="300">
-        <StackPanel>
-            <ItemsControl Tag="B" ItemsSource="{Binding B}" Style="{StaticResource ItemsControlStyle}" />
-            <ItemsControl Tag="I" ItemsSource="{Binding I}" Style="{StaticResource ItemsControlStyle}" />
-            <ItemsControl Tag="N" ItemsSource="{Binding N}" Style="{StaticResource ItemsControlStyle}" />
-            <ItemsControl Tag="G" ItemsSource="{Binding G}" Style="{StaticResource ItemsControlStyle}" />
-            <ItemsControl Tag="O" ItemsSource="{Binding O}" Style="{StaticResource ItemsControlStyle}" />
-        </StackPanel>
+    <Grid>
+        <Viewbox HorizontalAlignment="Left">
+            <StackPanel>
+                <Border Background="{StaticResource BackgroundBrush}" Padding="0,5,0,10" Margin="2">
+                    <ItemsControl Tag="→" Style="{StaticResource ItemsControlStyle}">
+                        <ItemsControl.ItemsSource>
+                            <MultiBinding Converter="{StaticResource TrimmedListConverter}" ConverterParameter="10">
+                                <Binding Path="History" />
+                                <Binding Path="B.Count" Mode="OneWay" />
+                                <Binding Path="I.Count" Mode="OneWay" />
+                                <Binding Path="N.Count" Mode="OneWay" />
+                                <Binding Path="G.Count" Mode="OneWay" />
+                                <Binding Path="O.Count" Mode="OneWay" />
+                            </MultiBinding>
+                        </ItemsControl.ItemsSource>
+                    </ItemsControl>
+                </Border>
+                <ItemsControl Tag="B" ItemsSource="{Binding B}" Style="{StaticResource ItemsControlStyle}" />
+                <ItemsControl Tag="I" ItemsSource="{Binding I}" Style="{StaticResource ItemsControlStyle}" />
+                <ItemsControl Tag="N" ItemsSource="{Binding N}" Style="{StaticResource ItemsControlStyle}" />
+                <ItemsControl Tag="G" ItemsSource="{Binding G}" Style="{StaticResource ItemsControlStyle}" />
+                <ItemsControl Tag="O" ItemsSource="{Binding O}" Style="{StaticResource ItemsControlStyle}" />
+            </StackPanel>
+        </Viewbox>
         <Viewbox>
             <Grid Margin="10">
                 <Grid.Style>
@@ -63,11 +80,12 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <Ellipse Fill="LightGreen" Height="20" Width="20" Stroke="White" />
+                <Ellipse Fill="#99666666" Height="20" Width="20" Margin="2,2,0,0" />
+                <Ellipse Fill="LightGreen" Height="20" Width="20" Stroke="#7BCB7B" />
                 <TextBlock Text="{Binding LetterOfAnnouncedNumber, Mode=OneWay}" TextAlignment="Center"
-                           FontWeight="Bold" Margin="0" FontSize="6" />
+                           FontWeight="Bold" Margin="1" FontSize="6" />
                 <TextBlock Text="{Binding AnnouncedNumber, Mode=OneWay}" TextAlignment="Center" FontWeight="Bold"
-                           Margin="3,3,3,1" />
+                           Margin="3,4,3,1" />
             </Grid>
         </Viewbox>
     </Grid>

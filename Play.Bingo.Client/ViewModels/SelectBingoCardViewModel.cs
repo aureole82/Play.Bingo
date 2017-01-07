@@ -6,10 +6,16 @@ namespace Play.Bingo.Client.ViewModels
 {
     public class SelectBingoCardViewModel : ViewModelBase
     {
-        private readonly IMessageService _messenger = App.Messenger;
+        private readonly IMessageService _messenger;
 
-        public SelectBingoCardViewModel()
+        public SelectBingoCardViewModel() : this(null)
         {
+            // For design view only.
+        }
+
+        public SelectBingoCardViewModel(IMessageService messenger)
+        {
+            _messenger = messenger;
             SelectCardCommand = new RelayCommand<BingoCardViewModel>(SelectCard);
             Cards = new ObservableCollection<BingoCardViewModel>();
 
@@ -21,20 +27,20 @@ namespace Play.Bingo.Client.ViewModels
             }
         }
 
-        #region Bindable properties and commands.
-
-        public ObservableCollection<BingoCardViewModel> Cards { get; private set; }
-
-        public RelayCommand<BingoCardViewModel> SelectCardCommand { get; private set; }
-
-        #endregion
-
         #region Private helper methods.
 
         private void SelectCard(BingoCardViewModel card)
         {
             _messenger.Publish(card);
         }
+
+        #endregion
+
+        #region Bindable properties and commands.
+
+        public ObservableCollection<BingoCardViewModel> Cards { get; }
+
+        public RelayCommand<BingoCardViewModel> SelectCardCommand { get; private set; }
 
         #endregion
     }

@@ -8,13 +8,23 @@ namespace Play.Bingo.Client.ViewModels
 {
     public class CaptureQrCodeViewModel : ViewModelBase
     {
-        private readonly IMessageService _messenger = App.Messenger;
+        private readonly IMessageService _messenger ;
         // Create a barcode reader instance.
         private readonly IBarcodeReader _reader = new BarcodeReader();
 
         #region Bindable properties and commands.
 
         private Bitmap _snapshot;
+
+        public CaptureQrCodeViewModel()
+        {
+            // For design view only.
+        }
+
+        public CaptureQrCodeViewModel(IMessageService messenger)
+        {
+            _messenger = messenger;
+        }
 
         public Bitmap Snapshot
         {

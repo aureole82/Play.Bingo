@@ -4,7 +4,8 @@
         xmlns:v="clr-namespace:Play.Bingo.Client.Views"
         xmlns:vm="clr-namespace:Play.Bingo.Client.ViewModels"
         Title="Bingo" Height="800" Width="1010" Icon="Images\Icon.ico"
-        DataContext="{StaticResource MainViewModel}">
+        DataContext="{StaticResource MainViewModel}"
+        Name="Root">
     <Window.InputBindings>
         <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.D0}" Key="D0" />
         <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.D1}" Key="D1" />
@@ -21,6 +22,8 @@
         <KeyBinding Command="{Binding KeyEnteredCommand}" CommandParameter="{x:Static Key.Back}" Key="Back" />
     </Window.InputBindings>
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
         <DataTemplate DataType="{x:Type vm:BingoCardViewModel}">
             <Viewbox>
                 <v:BingoCardView />
@@ -36,9 +39,7 @@
             <v:PrintBingoCardView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:BingoGameViewModel}">
-            <Viewbox>
-                <v:BingoGameView HorizontalAlignment="Left" MinWidth="200" />
-            </Viewbox>
+            <v:BingoGameView />
         </DataTemplate>
     </Window.Resources>
     <Grid>
@@ -57,8 +58,7 @@
             <Button Width="58" ToolTip="Play game!"
                     Style="{StaticResource MainButtonStyle}"
                     Command="{Binding PlayCommand}"
-                    Content="µ">
-            </Button>
+                    Content="µ" />
             <Button Width="58" ToolTip="Scan card!"
                     Style="{StaticResource MainButtonStyle}"
                     Command="{Binding ScanCommand}"
@@ -66,15 +66,13 @@
             <Button Width="58" ToolTip="Print card!"
                     Style="{StaticResource MainButtonStyle}"
                     Command="{Binding PrintPreviewCommand}"
-                    Content="&amp;" />
-            <Button Width="58" ToolTip="Open card!"
+                    FontFamily="Wingdings 2"
+                    Content="6" />
+            <Button Width="58" ToolTip="Show cards!"
                     Style="{StaticResource MainButtonStyle}"
                     Command="{Binding OpenCommand}"
-                    Content="1" />
-            <Button Width="58" ToolTip="Save card!"
-                    Style="{StaticResource MainButtonStyle}"
-                    Command="{Binding SaveCommand}"
-                    Content="&lt;" />
+                    FontFamily="Wingdings 2"
+                    Content="." />
             <Button Width="58" ToolTip="Generate new card!"
                     Style="{StaticResource MainButtonStyle}"
                     Command="{Binding GenerateCommand}"
@@ -82,17 +80,8 @@
         </StackPanel>
 
         <Viewbox Grid.Column="0">
-            <Viewbox.Style>
-                <Style TargetType="Viewbox">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsWinner}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Viewbox.Style>
-            <TextBlock Text="Winner!" FontWeight="Bold">
+            <TextBlock Text="Winner!" FontWeight="Bold"
+                       Visibility="{Binding IsWinner, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock.LayoutTransform>
                     <RotateTransform Angle="330" />
                 </TextBlock.LayoutTransform>

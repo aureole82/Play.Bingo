@@ -17,7 +17,7 @@ namespace Play.Bingo.Client.Helper
                 B = GenerateNumbers(0, 15, random),
                 I = GenerateNumbers(15, 30, random),
                 N = GenerateNumbers(30, 45, random, true),
-                G = GenerateNumbers(45, 50, random),
+                G = GenerateNumbers(45, 60, random),
                 O = GenerateNumbers(60, 75, random)
             };
         }

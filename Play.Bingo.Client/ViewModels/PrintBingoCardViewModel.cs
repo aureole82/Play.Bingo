@@ -15,22 +15,27 @@ namespace Play.Bingo.Client.ViewModels
     {
         private const int PageSize = 2;
         private readonly IDictionary<string, BingoCardModel> _allCards;
-        private readonly IMessageService _messenger = App.Messenger;
-        private readonly IStorageService _storage = App.Storage;
 
-        public PrintBingoCardViewModel()
+        public PrintBingoCardViewModel() : this(null)
+        {
+            // For design view only.
+
+            _allCards = CardGenerator.Generate(PageSize*2)
+                .Select((card, index) => new {key = $"{index + 1:D5}.card", card})
+                .ToDictionary(arg => arg.key, pair => pair.card);
+
+            TotalPages = Convert.ToInt32(Math.Ceiling((double)_allCards.Count / PageSize));
+            FillPage();
+        }
+
+        public PrintBingoCardViewModel(IStorageService storage)
         {
             PrintCommand = new RelayCommand(Print);
             PreviousCommand = new RelayCommand(Previous, CanPrevious);
             NextCommand = new RelayCommand(Next, CanNext);
             Cards = new ObservableCollection<BingoCardViewModel>();
 
-            _allCards = IsInDesignMode
-                ? CardGenerator.Generate(PageSize*2)
-                    .Select((card, i) =>
-                        new KeyValuePair<string, BingoCardModel>(string.Format("{0:D5}.card", i + 1), card))
-                    .ToDictionary(pair => pair.Key, pair => pair.Value)
-                : _storage.LoadCards();
+            _allCards = storage?.LoadCards() ?? new Dictionary<string, BingoCardModel>();
 
             TotalPages = Convert.ToInt32(Math.Ceiling((double) _allCards.Count/PageSize));
             FillPage();
@@ -39,7 +44,7 @@ namespace Play.Bingo.Client.ViewModels
         #region Attached control to print.
 
         public static readonly DependencyProperty PrintAreaProperty = DependencyProperty.RegisterAttached(
-            "PrintArea", typeof (Visual), typeof (PrintBingoCardViewModel), new PropertyMetadata(OnPrintAreaChanged));
+            "PrintArea", typeof(Visual), typeof(PrintBingoCardViewModel), new PropertyMetadata(OnPrintAreaChanged));
 
         private static Visual _printArea;
 
@@ -64,7 +69,7 @@ namespace Play.Bingo.Client.ViewModels
 
         private int _page = 1;
         private int _totalPages = 1;
-        public ObservableCollection<BingoCardViewModel> Cards { get; private set; }
+        public ObservableCollection<BingoCardViewModel> Cards { get; }
 
         public RelayCommand PrintCommand { get; private set; }
         public RelayCommand PreviousCommand { get; private set; }

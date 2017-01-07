@@ -75,6 +75,7 @@
     <Compile Include="Helper\QrCodeGenerator.cs" />
     <Compile Include="Helper\EnumerableExtensions.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
+    <Compile Include="Helper\TrimmedListConverter.cs" />
     <Compile Include="Models\BingoCardModel.cs" />
     <Compile Include="Models\BingoCardModelTests.cs">
       <DependentUpon>BingoCardModel.cs</DependentUpon>

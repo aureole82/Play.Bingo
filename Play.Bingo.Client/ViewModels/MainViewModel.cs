@@ -10,14 +10,18 @@ namespace Play.Bingo.Client.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly CaptureQrCodeViewModel _captureQrCodeViewModel= new CaptureQrCodeViewModel();
-        private readonly IMessageService _messenger = App.Messenger;
-        private readonly ISolver _solver = App.Solver;
-        private readonly IStorageService _storage = App.Storage;
+        private readonly IMessageService _messenger = new MessageService();
+        private readonly ISolver _solver = new Solver();
+        private readonly IStorageService _storage = new StorageService();
 
         public MainViewModel()
         {
+            //Solver.AddRule(new ColumnRule());
+            //Solver.AddRule(new RowRule());
+            //Solver.AddRule(new DiagonalRule());
+            _solver.AddRule(new AllRule());
+
             GenerateCommand = new RelayCommand(Generate);
-            SaveCommand = new RelayCommand(Save, CanSave);
             OpenCommand = new RelayCommand(Open);
             ScanCommand = new RelayCommand(Scan);
             PrintPreviewCommand = new RelayCommand(PrintPreview);
@@ -25,8 +29,8 @@ namespace Play.Bingo.Client.ViewModels
             NewCommand = new RelayCommand(New);
             KeyEnteredCommand = new RelayCommand<Key>(KeyEntered);
 
-            Play();
             _messenger.Subscribe<BingoCardViewModel>(ShowCard);
+            Play();
         }
 
         #region Bindable properties and commands.
@@ -58,7 +62,6 @@ namespace Play.Bingo.Client.ViewModels
         }
 
         public ICommand GenerateCommand { get; private set; }
-        public ICommand SaveCommand { get; private set; }
         public ICommand OpenCommand { get; private set; }
         public ICommand ScanCommand { get; private set; }
         public ICommand PrintPreviewCommand { get; private set; }
@@ -71,45 +74,30 @@ namespace Play.Bingo.Client.ViewModels
         #region Private helper methods.
 
         private BingoGameViewModel _currentGameViewModel;
-        private bool _saved;
 
         private void Generate()
         {
-            CurrentViewModel = new BingoCardViewModel();
-            _saved = false;
+            var viewModel = new BingoCardViewModel();
+
+            _storage.SaveCard(viewModel.Card);
+            CurrentViewModel = viewModel;
         }
 
         private void ShowCard(BingoCardViewModel card)
         {
             CurrentViewModel = card;
-            if (_currentGameViewModel != null)
+            if (_currentGameViewModel == null) return;
+
+            card.Mark(_currentGameViewModel.Game.Numbers);
+            IsWinner = _solver.IsSolved(_currentGameViewModel.Game.Numbers, card.Card);
+            if (IsWinner)
             {
-                card.Mark(_currentGameViewModel.Game.Numbers);
-                IsWinner = _solver.IsSolved(_currentGameViewModel.Game.Numbers, card.Card);
-                if (IsWinner)
+                new Thread(() =>
                 {
-                    new Thread(() =>
-                    {
-                        Thread.Sleep(10000);
-                        IsWinner = false;
-                    }).Start();
-                }
+                    Thread.Sleep(10000);
+                    IsWinner = false;
+                }).Start();
             }
-            _saved = true;
-        }
-
-        private bool CanSave()
-        {
-            return CurrentViewModel is BingoCardViewModel && !_saved;
-        }
-
-        private void Save()
-        {
-            var bingoCardViewModel = CurrentViewModel as BingoCardViewModel;
-            if (bingoCardViewModel == null) return;
-
-            _storage.SaveCard(bingoCardViewModel.Card);
-            _saved = true;
         }
 
         private void Scan()
@@ -119,7 +107,7 @@ namespace Play.Bingo.Client.ViewModels
 
         private void Open()
         {
-            var bingoCardSelector = new SelectBingoCardViewModel();
+            var bingoCardSelector = new SelectBingoCardViewModel(_messenger);
             CurrentViewModel = bingoCardSelector;
 
             new Thread(() =>
@@ -137,7 +125,7 @@ namespace Play.Bingo.Client.ViewModels
 
         private void PrintPreview()
         {
-            CurrentViewModel = new PrintBingoCardViewModel();
+            CurrentViewModel = new PrintBingoCardViewModel(_storage);
         }
 
         private void New()

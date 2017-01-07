@@ -20,8 +20,7 @@ namespace Play.Bingo.Client.ViewModels
                 {'G', new ObservableCollection<int>()},
                 {'O', new ObservableCollection<int>()}
             };
-
-        private readonly Stack<int> _inputs = new Stack<int>();
+        
         private readonly IMessageService _messenger;
         private readonly IStorageService _storage;
 
@@ -61,6 +60,9 @@ namespace Play.Bingo.Client.ViewModels
 
         private BingoGameModel _game;
         private int _announcedNumber;
+
+        public ObservableCollection<int> History { get; } = new ObservableCollection<int>();
+
         public ObservableCollection<int> B => _containers['B'];
         public ObservableCollection<int> I => _containers['I'];
         public ObservableCollection<int> N => _containers['N'];
@@ -167,11 +169,14 @@ namespace Play.Bingo.Client.ViewModels
             if (AnnouncedNumber > 0)
             {
                 AnnouncedNumber = 0;
+                _thread?.Abort();
+                _thread = null;
                 return;
             }
-            if (_inputs.Count == 0) return;
+            if (History.Count == 0) return;
 
-            var lastNumber = _inputs.Pop();
+            var lastNumber = History.Last();
+            History.RemoveAt(History.Count-1);
             var letter = lastNumber.GetLetter();
             if (!letter.HasValue) return;
 
@@ -189,20 +194,15 @@ namespace Play.Bingo.Client.ViewModels
             if (!letter.HasValue) return;
 
             var container = _containers[letter.Value];
-            if (container != null)
-                AddNumber(container, AnnouncedNumber);
+            if (container?.Contains(AnnouncedNumber) == false)
+            {
+                Console.WriteLine($@"{nameof(AddNumber)}({AnnouncedNumber})");
+                History.Add(AnnouncedNumber);
+                container.Add(AnnouncedNumber);
+                container.BubbleSort();
+                Save();
+            }
             AnnouncedNumber = 0;
-        }
-
-        private void AddNumber(Collection<int> container, int number)
-        {
-            if (container.Contains(number)) return;
-
-            Console.WriteLine($@"{nameof(AddNumber)}({number})");
-            container.Add(number);
-            container.BubbleSort();
-            _inputs.Push(number);
-            Save();
         }
 
         public void Save()
