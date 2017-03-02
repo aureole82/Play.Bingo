@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Media.Imaging;
 using Play.Bingo.Client.Helper;
 using Play.Bingo.Client.Models;
 
@@ -7,11 +8,11 @@ namespace Play.Bingo.Client.ViewModels
 {
     public class BingoCardViewModel : ViewModelBase
     {
-        public BingoCardViewModel() : this(CardGenerator.Generate(), "0001.card")
+        public BingoCardViewModel(IQrService qrService) : this(CardGenerator.Generate(), "0001.card", qrService)
         {
         }
 
-        public BingoCardViewModel(BingoCardModel bingoCard, string filename)
+        public BingoCardViewModel(BingoCardModel bingoCard, string filename, IQrService qrService)
         {
             Filename = filename;
             Card = bingoCard;
@@ -23,12 +24,21 @@ namespace Play.Bingo.Client.ViewModels
                 new BingoColumnViewModel('G', Card.G),
                 new BingoColumnViewModel('O', Card.O)
             };
+            Code = qrService?.Encode(bingoCard.ToBinary());
+        }
+
+        public void Mark(List<int> numbers)
+        {
+            foreach (var column in Columns)
+            {
+                column.Mark(numbers);
+            }
         }
 
         #region Bindable properties and commands.
 
         private BingoCardModel _card;
-        public BingoColumnViewModel[] Columns { get; private set; }
+        private BitmapSource _code;
 
         public BingoCardModel Card
         {
@@ -41,25 +51,27 @@ namespace Play.Bingo.Client.ViewModels
             }
         }
 
+        public BitmapSource Code
+        {
+            get { return _code; }
+            set
+            {
+                if (Equals(_code, value)) return;
+                _code = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public BingoColumnViewModel[] Columns { get; }
+
         public string Filename { get; private set; }
 
-        public string Id
-        {
-            get { return Convert.ToBase64String(Card.ToBinary()); }
-        }
+        public string Id => Convert.ToBase64String(Card.ToBinary());
 
         #endregion
 
         #region Private helper methods.
 
         #endregion
-
-        public void Mark(List<int> numbers)
-        {
-            foreach (var column in Columns)
-            {
-                column.Mark(numbers);
-            }
-        }
     }
 }

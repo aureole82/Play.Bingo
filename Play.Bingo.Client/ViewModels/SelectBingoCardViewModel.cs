@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Play.Bingo.Client.Helper;
 using Play.Bingo.Client.Services;
+using Play.Bingo.Client.Services.Implementations;
 
 namespace Play.Bingo.Client.ViewModels
 {
@@ -23,7 +24,8 @@ namespace Play.Bingo.Client.ViewModels
 
             for (var i = 0; i < 33; i++)
             {
-                Cards.Add(new BingoCardViewModel());
+                // The QR generation could be used for design data as well.
+                Cards.Add(new BingoCardViewModel(new QrService()));
             }
         }
 

@@ -55,6 +55,34 @@ namespace Play.Bingo.Client.Models
             return binary.ToArray();
         }
 
+        public override bool Equals(object obj)
+        {
+            var other = obj as BingoCardModel;
+            if (other == null) return false;
+
+            return Numbers.SequenceEqual(other.Numbers);
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(BingoCardModel)}{{" +
+                   $"B:{string.Join(",", B)};" +
+                   $"I:{string.Join(",", I)};" +
+                   $"N:{string.Join(",", N)};" +
+                   $"G:{string.Join(",", G)};" +
+                   $"O:{string.Join(",", O)}}}";
+        }
+
+        #region Bingo numbers.
+
+        public int[] B { get; set; }
+        public int[] I { get; set; }
+        public int[] N { get; set; }
+        public int[] G { get; set; }
+        public int[] O { get; set; }
+
+        #endregion
+
         #region Private helper methods.
 
         private static int[] Pick(IEnumerable<int> numbers, int skip, int offset, int take = 5)
@@ -65,16 +93,6 @@ namespace Play.Bingo.Client.Models
                 .Select(n => n + offset)
                 .ToArray();
         }
-
-        #endregion
-
-        #region Bingo numbers.
-
-        public int[] B { get; set; }
-        public int[] I { get; set; }
-        public int[] N { get; set; }
-        public int[] G { get; set; }
-        public int[] O { get; set; }
 
         #endregion
     }

@@ -68,7 +68,6 @@
     </ApplicationDefinition>
     <Compile Include="Helper\BingoExtensions.cs" />
     <Compile Include="Helper\CardGenerator.cs" />
-    <Compile Include="Helper\CardToQrConverter.cs" />
     <Compile Include="Helper\QrCodeGenerator.cs" />
     <Compile Include="Helper\EnumerableExtensions.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
@@ -82,11 +81,12 @@
     <Compile Include="Services\Implementations\MessageService.cs" />
     <Compile Include="Services\Implementations\StorageService.cs" />
     <Compile Include="Services\Implementations\Solver.cs" />
+    <Compile Include="Services\Implementations\QrService.cs" />
     <Compile Include="ViewModels\BingoCardViewModel.cs" />
     <Compile Include="ViewModels\BingoColumnViewModel.cs" />
     <Compile Include="ViewModels\BingoGameViewModel.cs" />
+    <Compile Include="Services\IQrService.cs" />
     <Compile Include="ViewModels\PrintBingoCardViewModel.cs" />
-    <Compile Include="ViewModels\QrCodeViewModel.cs" />
     <Compile Include="ViewModels\SelectBingoCardViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
@@ -102,9 +102,6 @@
     </Compile>
     <Compile Include="Views\BingoGameView.xaml.cs">
       <DependentUpon>BingoGameView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\QrCodeView.xaml.cs">
-      <DependentUpon>QrCodeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PrintBingoCardView.xaml.cs">
       <DependentUpon>PrintBingoCardView.xaml</DependentUpon>
@@ -140,10 +137,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\BingoGameView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\QrCodeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

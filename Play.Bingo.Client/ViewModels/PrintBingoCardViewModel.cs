@@ -8,6 +8,7 @@ using System.Windows.Media;
 using Play.Bingo.Client.Helper;
 using Play.Bingo.Client.Models;
 using Play.Bingo.Client.Services;
+using Play.Bingo.Client.Services.Implementations;
 
 namespace Play.Bingo.Client.ViewModels
 {
@@ -15,21 +16,24 @@ namespace Play.Bingo.Client.ViewModels
     {
         private const int PageSize = 2;
         private readonly IDictionary<string, BingoCardModel> _allCards;
+        private readonly IQrService _qrService;
 
-        public PrintBingoCardViewModel() : this(null)
+        public PrintBingoCardViewModel() : this(null, new QrService())
         {
             // For design view only.
 
-            _allCards = CardGenerator.Generate(PageSize*2)
+            _allCards = CardGenerator.Generate(PageSize * 2)
                 .Select((card, index) => new {key = $"{index + 1:D5}.card", card})
                 .ToDictionary(arg => arg.key, pair => pair.card);
 
-            TotalPages = Convert.ToInt32(Math.Ceiling((double)_allCards.Count / PageSize));
+            TotalPages = Convert.ToInt32(Math.Ceiling((double) _allCards.Count / PageSize));
             FillPage();
         }
 
-        public PrintBingoCardViewModel(IStorageService storage)
+        public PrintBingoCardViewModel(IStorageService storage, IQrService qrService)
         {
+            _qrService = qrService;
+
             PrintCommand = new RelayCommand(Print);
             PreviousCommand = new RelayCommand(Previous, CanPrevious);
             NextCommand = new RelayCommand(Next, CanNext);
@@ -37,7 +41,7 @@ namespace Play.Bingo.Client.ViewModels
 
             _allCards = storage?.LoadCards() ?? new Dictionary<string, BingoCardModel>();
 
-            TotalPages = Convert.ToInt32(Math.Ceiling((double) _allCards.Count/PageSize));
+            TotalPages = Convert.ToInt32(Math.Ceiling((double) _allCards.Count / PageSize));
             FillPage();
         }
 
@@ -140,9 +144,9 @@ namespace Play.Bingo.Client.ViewModels
         {
             Cards.Clear();
             foreach (var card in _allCards
-                .Skip((Page - 1)*PageSize)
+                .Skip((Page - 1) * PageSize)
                 .Take(PageSize)
-                .Select(pair => new BingoCardViewModel(pair.Value, pair.Key)))
+                .Select(pair => new BingoCardViewModel(pair.Value, pair.Key, _qrService)))
             {
                 Cards.Add(card);
             }

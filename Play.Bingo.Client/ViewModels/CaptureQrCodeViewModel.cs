@@ -1,16 +1,13 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using Play.Bingo.Client.Models;
 using Play.Bingo.Client.Services;
-using ZXing;
 
 namespace Play.Bingo.Client.ViewModels
 {
     public class CaptureQrCodeViewModel : ViewModelBase
     {
-        private readonly IMessageService _messenger ;
-        // Create a barcode reader instance.
-        private readonly IBarcodeReader _reader = new BarcodeReader();
+        private readonly IMessageService _messenger;
+        private readonly IQrService _qrService;
 
         #region Bindable properties and commands.
 
@@ -21,9 +18,10 @@ namespace Play.Bingo.Client.ViewModels
             // For design view only.
         }
 
-        public CaptureQrCodeViewModel(IMessageService messenger)
+        public CaptureQrCodeViewModel(IMessageService messenger, IQrService qrService)
         {
             _messenger = messenger;
+            _qrService = qrService;
         }
 
         public Bitmap Snapshot
@@ -39,17 +37,10 @@ namespace Play.Bingo.Client.ViewModels
 
         private void Decode(Bitmap bitmap)
         {
-            if (bitmap == null) return;
+            var data = _qrService.Decode(bitmap);
+            if (data == null) return;
 
-            // Detect and decode the barcode inside the bitmap.
-            var result = _reader.Decode(bitmap);
-            // If the result is an QR code ...
-            if (result == null || result.BarcodeFormat != BarcodeFormat.QR_CODE)
-                return;
-
-            // .. fetch the raw data and display the Bingo card.
-            var binary = Convert.FromBase64String(result.Text);
-            _messenger.Publish(new BingoCardViewModel(new BingoCardModel(binary), null));
+            _messenger.Publish(new BingoCardViewModel(new BingoCardModel(data), null, null));
         }
 
         #endregion

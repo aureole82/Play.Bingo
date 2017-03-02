@@ -5,13 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:Play.Bingo.Client.ViewModels"
              xmlns:v="clr-namespace:Play.Bingo.Client.Views"
-             xmlns:helper="clr-namespace:Play.Bingo.Client.Helper"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="700"
              d:DataContext="{d:DesignInstance vm:PrintBingoCardViewModel, IsDesignTimeCreatable=True}"
              Name="Root">
-    <UserControl.Resources>
-        <helper:CardToQrConverter x:Key="CardToQrConverter" />
-    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -41,9 +37,9 @@
                                 <TextBlock FontSize="8" Text="{Binding Id}" FontFamily="Consolas" />
                                 <TextBlock FontSize="8" Text="{Binding Filename}" FontFamily="Consolas" />
                             </StackPanel>
-                            <v:QrCodeView Grid.Column="1" Grid.Row="1" Height="80" Width="80"
-                                          HorizontalAlignment="Left"
-                                          DataContext="{Binding Converter={StaticResource CardToQrConverter}}" />
+                            <Image Grid.Column="1" Grid.Row="1" Height="80" Width="80"
+                                   HorizontalAlignment="Left"
+                                   Source="{Binding Code}" />
                         </Grid>
                     </Viewbox>
                 </DataTemplate>

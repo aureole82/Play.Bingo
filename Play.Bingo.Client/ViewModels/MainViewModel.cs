@@ -10,8 +10,9 @@ namespace Play.Bingo.Client.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly CaptureQrCodeViewModel _captureQrCodeViewModel ;
+        private readonly CaptureQrCodeViewModel _captureQrCodeViewModel;
         private readonly IMessageService _messenger = new MessageService();
+        private readonly IQrService _qrService = new QrService();
         private readonly ISolver _solver = new Solver();
 
         private readonly IStorageService _storage = IsInDesignMode
@@ -34,7 +35,7 @@ namespace Play.Bingo.Client.ViewModels
             KeyEnteredCommand = new RelayCommand<Key>(KeyEntered);
 
             _messenger.Subscribe<BingoCardViewModel>(ShowCard);
-            _captureQrCodeViewModel = new CaptureQrCodeViewModel(_messenger);
+            _captureQrCodeViewModel = new CaptureQrCodeViewModel(_messenger, _qrService);
             Play();
         }
 
@@ -82,7 +83,7 @@ namespace Play.Bingo.Client.ViewModels
 
         private void Generate()
         {
-            var viewModel = new BingoCardViewModel();
+            var viewModel = new BingoCardViewModel(_qrService);
 
             _storage.SaveCard(viewModel.Card);
             CurrentViewModel = viewModel;
@@ -118,7 +119,7 @@ namespace Play.Bingo.Client.ViewModels
             new Thread(() =>
             {
                 var bingoCards = _storage.LoadCards();
-                foreach (var card in bingoCards.Select(c => new BingoCardViewModel(c.Value, c.Key)))
+                foreach (var card in bingoCards.Select(c => new BingoCardViewModel(c.Value, c.Key, _qrService)))
                 {
                     var local = card;
                     UiInvoke(() => bingoCardSelector.Cards.Add(local));
@@ -130,7 +131,7 @@ namespace Play.Bingo.Client.ViewModels
 
         private void PrintPreview()
         {
-            CurrentViewModel = new PrintBingoCardViewModel(_storage);
+            CurrentViewModel = new PrintBingoCardViewModel(_storage, _qrService);
         }
 
         private void New()
@@ -195,12 +196,12 @@ namespace Play.Bingo.Client.ViewModels
 
         private static bool TryParse(Key key, out int number)
         {
-            if ((key >= Key.D0) && (key <= Key.D9))
+            if (key >= Key.D0 && key <= Key.D9)
             {
                 number = key - Key.D0;
                 return true;
             }
-            if ((key >= Key.NumPad0) && (key <= Key.NumPad9))
+            if (key >= Key.NumPad0 && key <= Key.NumPad9)
             {
                 number = key - Key.NumPad0;
                 return true;
