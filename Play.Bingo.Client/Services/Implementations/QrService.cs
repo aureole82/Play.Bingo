@@ -3,17 +3,23 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Play.Bingo.Client.Helper;
 using Play.Bingo.Client.ViewModels;
 using ZXing;
+using ZXing.QrCode;
+using ZXing.QrCode.Internal;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Play.Bingo.Client.Services.Implementations
 {
     internal class QrService : IQrService
     {
-        // Create a barcode reader instance.
         private readonly IBarcodeReader _reader = new BarcodeReader();
+
+        private readonly IBarcodeWriter _writer = new BarcodeWriter
+        {
+            Format = BarcodeFormat.QR_CODE,
+            Options = new QrCodeEncodingOptions {ErrorCorrection = ErrorCorrectionLevel.Q}
+        };
 
         public BitmapSource Encode(byte[] data)
         {
@@ -62,9 +68,7 @@ namespace Play.Bingo.Client.Services.Implementations
 
         public Bitmap Generate(byte[] data)
         {
-            var qrGenerator = new QrCodeGenerator();
-            var qrCode = qrGenerator.CreateQrCode(Convert.ToBase64String(data), QrCodeGenerator.EccLevel.Q);
-            return qrCode.GetGraphic(20);
+            return _writer.Write(Convert.ToBase64String(data));
         }
     }
 }

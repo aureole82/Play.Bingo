@@ -55,14 +55,20 @@ namespace Play.Bingo.Client.Models
             return binary.ToArray();
         }
 
+        /// <summary> Compares all numbers in the same order. </summary>
         public override bool Equals(object obj)
         {
             var other = obj as BingoCardModel;
-            if (other == null) return false;
-
-            return Numbers.SequenceEqual(other.Numbers);
+            return other != null && Numbers.SequenceEqual(other.Numbers);
         }
 
+        /// <summary> Returns unique hash from all numbers. </summary>
+        public override int GetHashCode()
+        {
+            return Convert.ToBase64String(ToBinary()).GetHashCode();
+        }
+
+        /// <summary> Returns a string with all numbers. </summary>
         public override string ToString()
         {
             return $"{nameof(BingoCardModel)}{{" +
@@ -72,16 +78,6 @@ namespace Play.Bingo.Client.Models
                    $"G:{string.Join(",", G)};" +
                    $"O:{string.Join(",", O)}}}";
         }
-
-        #region Bingo numbers.
-
-        public int[] B { get; set; }
-        public int[] I { get; set; }
-        public int[] N { get; set; }
-        public int[] G { get; set; }
-        public int[] O { get; set; }
-
-        #endregion
 
         #region Private helper methods.
 
@@ -93,6 +89,16 @@ namespace Play.Bingo.Client.Models
                 .Select(n => n + offset)
                 .ToArray();
         }
+
+        #endregion
+
+        #region Bingo numbers.
+
+        public int[] B { get; set; }
+        public int[] I { get; set; }
+        public int[] N { get; set; }
+        public int[] G { get; set; }
+        public int[] O { get; set; }
 
         #endregion
     }
