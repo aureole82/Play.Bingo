@@ -20,10 +20,10 @@ namespace Play.Bingo.Client.ViewModels
 
         public MainViewModel()
         {
-            //Solver.AddRule(new ColumnRule());
-            //Solver.AddRule(new RowRule());
-            //Solver.AddRule(new DiagonalRule());
-            _solver.AddRule(new AllRule());
+            _solver.AddRule(new ColumnRule());
+            _solver.AddRule(new RowRule());
+            _solver.AddRule(new DiagonalRule());
+            //_solver.AddRule(new AllRule());
 
             GenerateCommand = new RelayCommand(Generate);
             OpenCommand = new RelayCommand(Open);
