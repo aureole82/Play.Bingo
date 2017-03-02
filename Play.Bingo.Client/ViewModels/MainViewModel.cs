@@ -10,7 +10,7 @@ namespace Play.Bingo.Client.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly CaptureQrCodeViewModel _captureQrCodeViewModel = new CaptureQrCodeViewModel();
+        private readonly CaptureQrCodeViewModel _captureQrCodeViewModel ;
         private readonly IMessageService _messenger = new MessageService();
         private readonly ISolver _solver = new Solver();
 
@@ -34,6 +34,7 @@ namespace Play.Bingo.Client.ViewModels
             KeyEnteredCommand = new RelayCommand<Key>(KeyEntered);
 
             _messenger.Subscribe<BingoCardViewModel>(ShowCard);
+            _captureQrCodeViewModel = new CaptureQrCodeViewModel(_messenger);
             Play();
         }
 
