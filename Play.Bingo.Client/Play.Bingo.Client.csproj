@@ -38,9 +38,6 @@
     <ApplicationIcon>Images\Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
@@ -77,9 +74,6 @@
     <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Helper\TrimmedListConverter.cs" />
     <Compile Include="Models\BingoCardModel.cs" />
-    <Compile Include="Models\BingoCardModelTests.cs">
-      <DependentUpon>BingoCardModel.cs</DependentUpon>
-    </Compile>
     <Compile Include="Models\BingoGameModel.cs" />
     <Compile Include="Services\Implementations\DesignStorageService.cs" />
     <Compile Include="Services\IMessageService.cs" />
